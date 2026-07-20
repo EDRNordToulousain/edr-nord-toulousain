@@ -17,6 +17,7 @@ const titles: Record<string, string> = {
   "tournoi-edr": "Le tournoi de l’EDR",
   "tournoi-edr/2027": "Tournoi de l’EDR — Édition 2027",
   galerie: "Galerie photos",
+  actualites: "Les actualités de l’EDR Nord Toulousain",
   evenements: "Les événements",
   partenaires: "Nos partenaires",
   "partenaires/mairies": "Les mairies partenaires",
@@ -36,11 +37,12 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const path = (await params).slug.join("/");
   const title = titles[path] ?? site.name;
+  const description = path === "tournoi-edr/2027" ? "Tournoi de l’EDR Nord Toulousain le samedi 5 juin 2027 : compte à rebours et informations pratiques." : path === "actualites" ? "Actualités, affiches et dossier d’inscription de l’École de Rugby Nord Toulousain." : `${title} : informations officielles de l’École de Rugby Nord Toulousain.`;
   return {
     title,
-    description: `${title} : informations officielles de l’École de Rugby Nord Toulousain.`,
+    description,
     alternates: { canonical: `/${path}` },
-    openGraph: { title: `${title} | EDR Nord Toulousain`, description: site.description, url: `/${path}` },
+    openGraph: { title: `${title} | EDR Nord Toulousain`, description, url: `/${path}` },
   };
 }
 

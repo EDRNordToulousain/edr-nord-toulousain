@@ -7,6 +7,7 @@ export const site = {
   address: ["2 rue de Verdun", "31790 Saint-Jory"],
   email: "contact.edrnordtoulousain@gmail.com",
   social: "Réseaux sociaux à venir",
+  canonicalUrl: "https://www.edr-nordtoulousain.fr",
 } as const;
 
 export const categories = [
@@ -36,10 +37,69 @@ export const values = [
   ["Esprit d’équipe", "Faire vivre le collectif et la fierté d’être ensemble."],
 ] as const;
 
-export const partners = {
-  mairies: ["Mairie de Saint-Jory", "Mairie de Lespinasse", "Mairie de Bruguières"],
-  entreprises: ["Amipub", "Tutti Pizza Bruguières", "Super U Bruguières"],
+export type Partner = {
+  name: string;
+  logo?: string;
+  officialUrl?: string;
+  sourceUrl?: string;
+  note?: string;
+};
+
+export const partners: { mairies: readonly Partner[]; entreprises: readonly Partner[] } = {
+  mairies: [
+    { name: "Mairie de Cépet", logo: "/images/partners/mairies/cepet.jpg", officialUrl: "https://www.cepet.fr/", sourceUrl: "https://www.cepet.fr/skins/cepet2/resources/img/header-logo-sm.png" },
+    { name: "Mairie de Saint-Jory", logo: "/images/partners/mairies/saint-jory.png", officialUrl: "https://saint-jory.fr/", sourceUrl: "https://saint-jory.fr/app/uploads/2019/07/logo-3.png" },
+    { name: "Mairie de Lespinasse", logo: "/images/partners/mairies/lespinasse.png", officialUrl: "https://www.ville-lespinasse.fr/", sourceUrl: "https://www.ville-lespinasse.fr/wp-content/uploads/2018/11/logo-Lespinasse-vignette.png" },
+    { name: "Mairie de Bruguières", logo: "/images/partners/mairies/bruguieres.png", officialUrl: "https://www.mairie-bruguieres.fr/", sourceUrl: "https://files.appli-intramuros.com/img/city_logo/agglo/713/d901a54e3ebd5a82629246729170d756_bruguieres.png" },
+    { name: "Mairie de Villeneuve-lès-Bouloc", logo: "/images/partners/mairies/villeneuve-les-bouloc-logo.jpg", officialUrl: "https://www.villeneuvelesbouloc.fr/", sourceUrl: "https://static.neopse.com/medias/p/2177/site/c7/b4/92/c7b492241c30a058295427e0dca83c7a7fe4165d.jpg" },
+  ],
+  entreprises: [
+    { name: "Amipub", officialUrl: "https://amipub.com/", note: "Logo officiel à fournir" },
+    { name: "Tutti Pizza Bruguières", logo: "/images/partners/entreprises/tutti-pizza-bruguieres.png", officialUrl: "https://bruguieres.tutti-pizza.com/", sourceUrl: "https://mediab.izipass.cloud/Media/Thumbs/0161/0161547-150.png" },
+    { name: "Super U Bruguières", officialUrl: "https://www.magasins-u.com/magasin/superu-bruguieres", note: "Logo officiel à fournir" },
+    { name: "Les Salaisons de Saint-Sauveur", logo: "/images/partners/entreprises/salaisons-saint-sauveur.png", officialUrl: "https://www.salaisonsdesaintsauveur.fr/", sourceUrl: "https://www.salaisonsdesaintsauveur.fr/wp-content/uploads/2025/08/cropped-Logo-StSauveur-CMJN-2.png" },
+    { name: "Crédit Agricole Saint-Jory", logo: "/images/partners/entreprises/credit-agricole.svg", officialUrl: "https://www.credit-agricole.fr/particulier/agence/toulouse-31/saint-jory-4675.html", sourceUrl: "https://www.credit-agricole.fr/content/dam/assetsca/master/public/commun/images/autre/images/NPC-logo_Agir_chaque_jour_CA_H_Desktop-1.svg", note: "Logo national officiel" },
+    { name: "LD Studio", note: "Identification du partenaire à confirmer" },
+  ],
+};
+
+export const leadership = [
+  { familyName: "DESTARAC", givenName: "Romain", displayName: "Romain Destarac", role: "Co-président" },
+  { familyName: "SIMON", givenName: "Séverine", displayName: "Séverine Simon", role: "Co-présidente" },
+  { familyName: "SORBES-BALLESTEROS", givenName: "Leslie", displayName: "Leslie Sorbes-Ballesteros", role: "Trésorière" },
+  { familyName: "CABOT", givenName: "Peggy", displayName: "Peggy Cabot", role: "Secrétaire" },
+] as const;
+
+export const clubHistory = [
+  "Créé en 1973, le club RCSJB est formé de deux équipes séniors évoluant en Championnat Promotion Honneur, d’un pôle Jeunes avec une équipe Cadets (M16) et une équipe Juniors (M19) et d’une école de rugby NORD TOULOUSAIN, pour les enfants de 3 à 14 ans, regroupant les communes de Saint-Jory, Bruguières, Cépet, Villeneuve-lès-Bouloc et Lespinasse.",
+  "Toutes ces équipes sont encadrées par une quarantaine de dirigeants et éducateurs ou entraîneurs diplômés.",
+] as const;
+
+export const documents = {
+  partner: {
+    title: "Dossier de partenariat — École de Rugby Nord Toulousain",
+    path: "/documents/partenaires/dossier-partenariat-edr-nord-toulousain.pdf",
+  },
+  registration: {
+    title: "Dossier d’inscription 2026/2027 — École de Rugby Nord Toulousain",
+    path: "/documents/inscriptions/dossier-inscription-edr-2026-2027.docx",
+  },
 } as const;
+
+export const news = [
+  {
+    title: "Reprise des entraînements — Saison 2026-2027",
+    description: "Reprise annoncée le mercredi 2 septembre 2026 : U6 et U8 à 17 h, U10 et U12 à 17 h 30 au stade de Saint-Jory, et U14 à 18 h au stade de Bruguières.",
+    path: "/images/news/reprise-entrainements-2026.jpg",
+    alt: "Affiche de reprise des entraînements de l’EDR Nord Toulousain le 2 septembre 2026",
+  },
+  {
+    title: "Réunion de rentrée des éducateurs et bénévoles",
+    description: "Réunion de préparation de la saison 2026-2027 le vendredi 28 août 2026 à partir de 18 h, au Club House, rue de Verdun à Saint-Jory.",
+    path: "/images/news/reunion-rentree-2026.jpg",
+    alt: "Affiche de la réunion de rentrée des éducateurs et bénévoles le 28 août 2026",
+  },
+] as const;
 
 export const events = [
   { slug: "loto", title: "Loto de l’EDR Nord Toulousain" },
@@ -68,6 +128,7 @@ export const navigation = [
   },
   { label: "Tournoi EDR", href: "/tournoi-edr" },
   { label: "Galerie", href: "/galerie" },
+  { label: "Actualités", href: "/actualites" },
   {
     label: "Événements",
     href: "/evenements",
@@ -83,13 +144,9 @@ export const navigation = [
   },
 ] as const;
 
-export const editableCalendars = {
-  plateaux: [],
-  tournois: [],
-} as const;
-
 export const tournament2027 = {
-  date: "À venir",
+  date: "Samedi 5 juin 2027",
+  target: "2027-06-05T00:00:00+02:00",
   place: "À venir",
   categories: "À venir",
   hours: "À venir",
@@ -109,6 +166,7 @@ export const allPaths = [
   "/tournoi-edr",
   "/tournoi-edr/2027",
   "/galerie",
+  "/actualites",
   "/evenements",
   ...events.map((event) => `/evenements/${event.slug}`),
   "/partenaires",

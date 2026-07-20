@@ -5,10 +5,11 @@ import { Footer } from "@/components/Footer";
 import { site } from "@/data/site-content";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://edr-nord-toulousain.vercel.app"),
+  metadataBase: new URL(site.canonicalUrl),
   title: { default: site.title, template: "%s | EDR Nord Toulousain" },
   description: site.description,
-  openGraph: { type: "website", locale: "fr_FR", siteName: site.name, title: site.title, description: site.description },
+  alternates: { canonical: "/" },
+  openGraph: { type: "website", locale: "fr_FR", siteName: site.name, title: site.title, description: site.description, url: "/" },
   icons: { icon: "/favicon.svg" },
 };
 

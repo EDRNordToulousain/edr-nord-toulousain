@@ -1,7 +1,12 @@
 import Link from "next/link";
-import { categories, events, partners, tournament2027 } from "@/data/site-content";
+import { categories, events, tournament2027 } from "@/data/site-content";
 import { ImageWithFallback } from "./ImageWithFallback";
 import { Button, Card, Container, InfoGrid, PageHero, SectionTitle } from "./UI";
+import { PresentationDetails } from "./PresentationDetails";
+import { PartnerPage } from "./PartnerPage";
+import { NewsPage } from "./NewsPage";
+import { SeasonCalendar as MonthlySeasonCalendar } from "./SeasonCalendar";
+import { TournamentCountdown } from "./TournamentCountdown";
 
 const presentationParagraphs = [
   "Bienvenue à l’École de Rugby Nord Toulousain, un lieu d’apprentissage, de partage et de passion où chaque enfant peut découvrir le rugby, progresser à son rythme et grandir au sein d’un collectif.",
@@ -16,7 +21,7 @@ function Presentation() {
     ["Notre mission", "Faire découvrir le rugby dans un environnement accueillant, éducatif et adapté à chaque âge."],
     ["Notre engagement", "Accompagner chaque enfant dans sa progression sportive et humaine, dans le respect de son rythme et de sa personnalité."],
     ["Notre force", "Une équipe d’éducateurs, de bénévoles, de familles et de partenaires réunis autour d’une passion commune."],
-  ].map(([title, text]) => <Card key={title}><h2 className="text-2xl font-black text-night">{title}</h2><p className="mt-4 leading-7 text-slate-600">{text}</p></Card>)}</div><ImageWithFallback src="/images/presentation-groupe.jpg" alt="Photo de groupe de l’EDR Nord Toulousain" placeholder="PHOTO DE GROUPE À VENIR" className="mt-14 aspect-[16/7] rounded-3xl" /><div className="mt-6 grid gap-5 md:grid-cols-2"><Card><h2 className="text-2xl font-black">L’équipe dirigeante</h2><p className="mt-3 text-slate-600">Contenus complémentaires à venir.</p></Card><Card><h2 className="text-2xl font-black">L’histoire de l’EDR</h2><p className="mt-3 text-slate-600">Contenus complémentaires à venir.</p></Card></div></Container></>;
+  ].map(([title, text]) => <Card key={title}><h2 className="text-2xl font-black text-night">{title}</h2><p className="mt-4 leading-7 text-slate-600">{text}</p></Card>)}</div><ImageWithFallback src="/images/presentation-groupe.jpg" alt="Photo de groupe de l’EDR Nord Toulousain" placeholder="PHOTO DE GROUPE À VENIR" className="mt-14 aspect-[16/7] rounded-3xl" /><PresentationDetails /></Container></>;
 }
 
 function Categories() {
@@ -40,7 +45,7 @@ function CalendarHub({ type }: { type?: "plateaux" | "tournois" }) {
 
 function SeasonCalendar({ type }: { type: "plateaux" | "tournois" }) {
   const title = type === "plateaux" ? "Plateaux" : "Tournois";
-  return <><PageHero title={`${title} — Saison 2026-2027`} text={`Le calendrier des ${title.toLowerCase()} est en attente des dates et des lieux officiels.`} /><Container className="py-16"><Card><p className="text-xl font-bold text-night">Les informations seront communiquées dans les plus brefs délais.</p><div className="mt-8"><InfoGrid items={type === "plateaux" ? [["Date", "À venir"], ["Heure", "À venir"], ["Catégorie", "À venir"], ["Lieu", "À venir"], ["Adresse", "À venir"], ["Équipe organisatrice", "À venir"], ["Informations pratiques", "À venir"], ["Itinéraire", "À venir"]] : [["Date", "À venir"], ["Nom du tournoi", "À venir"], ["Catégories concernées", "À venir"], ["Lieu", "À venir"], ["Adresse", "À venir"], ["Horaires", "À venir"], ["Informations pratiques", "À venir"], ["Itinéraire", "À venir"]]} /></div></Card></Container></>;
+  return <><PageHero title={`${title} — Saison 2026-2027`} text={`Un calendrier mensuel prêt à accueillir les dates officielles des ${title.toLowerCase()}.`} /><Container className="py-16"><MonthlySeasonCalendar type={type} /></Container></>;
 }
 
 function Choice({ title, text, href }: { title: string; text: string; href: string }) {
@@ -49,7 +54,7 @@ function Choice({ title, text, href }: { title: string; text: string; href: stri
 
 function Tournament({ edition = false }: { edition?: boolean }) {
   if (!edition) return <><PageHero title="Le tournoi de l’EDR Nord Toulousain" text="Un grand rendez-vous sportif et convivial porté par l’école de rugby." /><Container className="py-16"><Choice title="Édition 2027" text="Découvrez les premières informations sur la prochaine édition." href="/tournoi-edr/2027" /></Container></>;
-  return <><PageHero title="Tournoi de l’EDR Nord Toulousain — Édition 2027" text="L’EDR Nord Toulousain prépare son tournoi 2027. Les équipes participantes, le programme, les horaires et les modalités d’inscription seront annoncés prochainement." /><Container className="py-16"><InfoGrid items={[["Date", tournament2027.date], ["Lieu", tournament2027.place], ["Catégories concernées", tournament2027.categories], ["Horaires", tournament2027.hours], ["Inscriptions", tournament2027.registration]]} /><div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{["Affiche officielle", "Programme", "Équipes participantes", "Inscriptions", "Restauration", "Plan d’accès", "Partenaires du tournoi", "Résultats", "Photographies"].map((item) => <Card key={item}><h2 className="font-black">{item}</h2><p className="mt-2 text-sm text-slate-500">À venir</p></Card>)}</div></Container></>;
+  return <><PageHero eyebrow="Rendez-vous officiel" title="Tournoi de l’EDR Nord Toulousain — Édition 2027" text="L’EDR Nord Toulousain prépare son tournoi 2027. Les équipes participantes, le programme, les horaires et les modalités d’inscription seront annoncés prochainement." /><Container className="py-16"><div className="mb-8 rounded-3xl border-2 border-red bg-white p-6 text-center shadow-card"><p className="text-sm font-black uppercase tracking-[.18em] text-red">Date officielle</p><p className="mt-2 text-3xl font-black text-night sm:text-5xl">{tournament2027.date}</p></div><TournamentCountdown target={tournament2027.target} /><div className="mt-8"><InfoGrid items={[["Lieu", tournament2027.place], ["Catégories concernées", tournament2027.categories], ["Horaires", tournament2027.hours], ["Inscriptions", tournament2027.registration]]} /></div><div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{["Affiche officielle du tournoi", "Bulletin d’inscription", "Modalités d’inscription", "Catégories concernées", "Programme", "Équipes participantes", "Idées d’hébergement pour les groupes", "Restauration", "Plan d’accès", "Partenaires du tournoi", "Informations pratiques", "Résultats", "Galerie photos"].map((item) => <Card key={item}><h2 className="font-black text-night">{item}</h2><p className="mt-2 text-sm text-slate-500">Informations à venir</p></Card>)}</div></Container></>;
 }
 
 function Gallery() {
@@ -63,9 +68,7 @@ function Events({ slug }: { slug?: string }) {
 }
 
 function Partners({ type }: { type?: "mairies" | "entreprises" }) {
-  const items = type ? partners[type] : [...partners.mairies, ...partners.entreprises];
-  const title = type === "mairies" ? "Les mairies partenaires" : type === "entreprises" ? "Les entreprises partenaires" : "Nos partenaires";
-  return <><PageHero title={title} text="L’EDR Nord Toulousain remercie chaleureusement les communes et les entreprises qui accompagnent l’école de rugby et contribuent à la réalisation de ses projets." /><Container className="py-16">{!type && <div className="mb-12 grid gap-6 md:grid-cols-2"><Choice title="Les mairies" text="Les communes qui soutiennent l’EDR." href="/partenaires/mairies" /><Choice title="Les entreprises" text="Les acteurs locaux qui accompagnent nos projets." href="/partenaires/entreprises" /></div>}<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{items.map((partner) => <Card key={partner} className="text-center"><div className="grid aspect-[3/2] place-items-center rounded-2xl border border-dashed border-slate-300 bg-mist text-sm font-bold text-slate-400">LOGO OFFICIEL À AJOUTER</div><h2 className="mt-5 text-xl font-black">{partner}</h2><p className="mt-2 text-sm text-slate-500">{type === "mairies" ? "Lien à ajouter" : "Informations à venir"}</p></Card>)}</div></Container></>;
+  return <PartnerPage type={type} />;
 }
 
 function Contact() {
@@ -90,6 +93,7 @@ export function PageRenderer({ path }: { path: string }) {
   if (path === "tournoi-edr") return <Tournament />;
   if (path === "tournoi-edr/2027") return <Tournament edition />;
   if (path === "galerie") return <Gallery />;
+  if (path === "actualites") return <NewsPage />;
   if (path === "evenements") return <Events />;
   if (parts[0] === "evenements") return <Events slug={parts[1]} />;
   if (path === "partenaires") return <Partners />;

@@ -18,6 +18,7 @@ a { text-underline-offset: 3px; }
     linear-gradient(90deg, transparent 49.7%, white 50%, transparent 50.3%),
     radial-gradient(circle at 50% 50%, transparent 0 64px, white 65px 67px, transparent 68px);
 }
+.calendar-week { grid-template-columns: repeat(5, minmax(0, 1fr)) minmax(0, 1.45fr) minmax(0, 1fr); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
 }
