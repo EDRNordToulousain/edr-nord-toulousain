@@ -2,6 +2,7 @@ import { Button, Card, Container, SectionTitle } from "@/components/UI";
 import { ImageWithFallback } from "@/components/ImageWithFallback";
 import { partners, values } from "@/data/site-content";
 import Image from "next/image";
+import { HomeNewsCarousel } from "@/components/HomeNewsCarousel";
 
 const quickLinks = [
   ["🏉", "Les catégories", "Du Baby Rugby aux U14", "/categories"],
@@ -27,6 +28,8 @@ export default function HomePage() {
           </div>
         </Container>
       </section>
+
+      <HomeNewsCarousel />
 
       <section className="py-20"><Container><div className="grid items-center gap-10 lg:grid-cols-[.8fr_1.2fr]"><SectionTitle kicker="Bienvenue">Une école pour apprendre, progresser et s’épanouir</SectionTitle><p className="text-lg leading-8 text-slate-600">Du Baby Rugby aux U14, l’EDR Nord Toulousain accompagne les jeunes joueuses et joueurs dans un cadre bienveillant, structuré et convivial. Ici, le plaisir du jeu et la force du collectif font grandir chaque enfant.</p></div></Container></section>
 

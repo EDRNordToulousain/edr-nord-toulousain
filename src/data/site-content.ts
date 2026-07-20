@@ -88,12 +88,14 @@ export const documents = {
 
 export const news = [
   {
+    id: "reprise-entrainements",
     title: "Reprise des entraînements — Saison 2026-2027",
     description: "Reprise annoncée le mercredi 2 septembre 2026 : U6 et U8 à 17 h, U10 et U12 à 17 h 30 au stade de Saint-Jory, et U14 à 18 h au stade de Bruguières.",
     path: "/images/news/reprise-entrainements-2026.jpg",
     alt: "Affiche de reprise des entraînements de l’EDR Nord Toulousain le 2 septembre 2026",
   },
   {
+    id: "reunion-rentree",
     title: "Réunion de rentrée des éducateurs et bénévoles",
     description: "Réunion de préparation de la saison 2026-2027 le vendredi 28 août 2026 à partir de 18 h, au Club House, rue de Verdun à Saint-Jory.",
     path: "/images/news/reunion-rentree-2026.jpg",

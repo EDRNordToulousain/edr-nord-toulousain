@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 export function Container({ children, className = "" }: { children: ReactNode; className?: string }) {
   return <div className={`mx-auto w-full max-w-7xl px-5 sm:px-6 ${className}`}>{children}</div>;
@@ -13,8 +13,8 @@ export function SectionTitle({ kicker, children, center = false }: { kicker?: st
   return <div className={center ? "text-center" : ""}>{kicker && <p className="text-sm font-black uppercase tracking-[.18em] text-red">{kicker}</p>}<h2 className="mt-2 text-3xl font-black tracking-tight text-night sm:text-4xl">{children}</h2></div>;
 }
 
-export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <article className={`rounded-3xl border border-slate-200 bg-white p-6 shadow-card ${className}`}>{children}</article>;
+export function Card({ children, className = "", ...props }: ComponentPropsWithoutRef<"article">) {
+  return <article {...props} className={`rounded-3xl border border-slate-200 bg-white p-6 shadow-card ${className}`}>{children}</article>;
 }
 
 export function Button({ href, children, variant = "red" }: { href: string; children: ReactNode; variant?: "red" | "blue" | "light" }) {

@@ -64,6 +64,7 @@ Déposer chaque fichier au chemin exact indiqué ci-dessous. Les composants affi
 | Logos des mairies | `public/images/partners/mairies/` |
 | Logos des entreprises | `public/images/partners/entreprises/` |
 | Visuels d’actualité | `public/images/news/` |
+| Visuels du carrousel d’accueil | `public/images/carousel/` |
 | Affiches d’événements | `public/images/events/nom-evenement.jpg` |
 | Photos de galerie | `public/images/gallery/photo-1.jpg`, `photo-2.jpg`, etc. |
 
@@ -96,6 +97,21 @@ Dans `src/data/calendar.ts`, ajouter une entrée dans `seasonEvents.plateaux` ou
 ```
 
 Supprimer l’exemple après l’avoir lu : il sert uniquement à montrer la structure et n’est pas affiché sur le site.
+
+## Gérer le carrousel « À la une »
+
+Les diapositives de la page d’accueil sont centralisées dans `src/data/home-carousel.ts`.
+
+Pour ajouter une actualité :
+
+1. déposer son image, sans espace ni accent dans le nom, dans `public/images/carousel/` ;
+2. ajouter une entrée dans `homeCarouselSlides` avec un identifiant unique, le titre, la description, le chemin de l’image, son texte alternatif et le lien de destination ;
+3. choisir sa position avec `order` (le plus petit nombre apparaît en premier) ;
+4. utiliser `enabled: false` pour masquer temporairement la diapositive sans supprimer ses données.
+
+Le délai de défilement automatique est défini par `HOME_CAROUSEL_INTERVAL_MS`. Sa valeur est exprimée en millisecondes : `6_000` correspond à six secondes.
+
+Une diapositive peut ne pas avoir d’image. Dans ce cas, le carrousel affiche une carte graphique cohérente avec le site à partir du titre et de la description fournis.
 
 ## Documents publics
 
