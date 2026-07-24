@@ -2,6 +2,7 @@ import Link from "next/link";
 import { galleryPhotos } from "@/data/gallery";
 import { Container, PageHero } from "./UI";
 import { ImageWithFallback } from "./ImageWithFallback";
+import { GalleryCarousel } from "./GalleryCarousel";
 
 export function GalleryPage() {
   return (
@@ -16,20 +17,7 @@ export function GalleryPage() {
           </Link>
         </section>
         {galleryPhotos.length ? (
-          <div className="mx-auto grid max-w-5xl gap-8">
-            {galleryPhotos.map((photo) => (
-              // Les fichiers conservent ici leur format naturel afin qu’aucune photographie ne soit coupée.
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={photo.src}
-                src={photo.src}
-                alt={photo.alt}
-                loading="lazy"
-                decoding="async"
-                className="h-auto w-full rounded-2xl bg-white shadow-card"
-              />
-            ))}
-          </div>
+          <GalleryCarousel photos={galleryPhotos} />
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }, (_, index) => <ImageWithFallback key={index} src={`/images/gallery/ld-studio/photo-${index + 1}.jpg`} alt="" placeholder="Photographie à venir" className="aspect-[4/3] rounded-2xl" />)}
