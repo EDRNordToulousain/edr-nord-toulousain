@@ -67,8 +67,10 @@ function Events({ slug }: { slug?: string }) {
   const date = "date" in event ? event.date : "À venir";
   const categoriesLabel = "categories" in event ? event.categories : undefined;
   const futureSections = event.slug === "voyage-fin-annee"
-    ? ["Destination", "Dates", "Programme", "Transport", "Hébergement", "Inscriptions", "Informations pratiques", "Photographies"]
-    : ["Affiche", "Présentation de l’événement", "Modalités de participation", "Tarifs éventuels", "Inscriptions", "Partenaires", "Photographies"];
+    ? ["Destination", "Dates", "Programme", "Transport", "Hébergement", "Informations pratiques", "Photographies"]
+    : event.slug === "vide-grenier"
+      ? ["Affiche", "Présentation de l’événement", "Inscriptions", "Tarifs", "Partenaires", "Photographies"]
+      : ["Affiche", "Présentation de l’événement", "Partenaires", "Photographies"];
   return <><PageHero title={event.title} text="Toutes les informations concernant cet événement seront communiquées prochainement." /><Container className="py-16"><InfoGrid items={[["Date", date], ["Heure", "À venir"], ["Lieu", "À venir"], ...(categoriesLabel ? [["Catégories concernées", categoriesLabel] as const] : [])]} />{event.slug === "noel" && <p className="mt-5 rounded-2xl bg-red/10 p-5 font-bold text-red">Plus d’informations à venir</p>}<div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">{futureSections.map((item) => <Card key={item}><h2 className="text-xl font-black">{item}</h2><p className="mt-3 text-slate-500">Informations à venir</p></Card>)}</div></Container></>;
 }
 
