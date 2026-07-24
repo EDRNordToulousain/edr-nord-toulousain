@@ -8,7 +8,8 @@ export const site = {
   email: "contact.edrnordtoulousain@gmail.com",
   partnershipEmail: "partenaires.edrnordtoulousain@gmail.com",
   siret: "924 035 793 00018",
-  social: "Réseaux sociaux à venir",
+  facebookUrl: "https://www.facebook.com/edrnordtoulousain",
+  instagramUrl: "https://www.instagram.com/edr_nord_toulousain/",
   canonicalUrl: "https://www.edr-nordtoulousain.fr",
 } as const;
 
@@ -227,7 +228,6 @@ export const partners: { mairies: readonly Partner[]; entreprises: readonly Part
       name: "LD Studio",
       logo: "/images/partners/entreprises/ld-studio.png",
       officialUrl: "https://www.instagram.com/ldstudio31/",
-      linkLabel: "Découvrir LD Studio sur Instagram",
     },
     {
       name: "RO Maintenance",

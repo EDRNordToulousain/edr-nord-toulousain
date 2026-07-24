@@ -16,8 +16,19 @@ export function GalleryPage() {
           </Link>
         </section>
         {galleryPhotos.length ? (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {galleryPhotos.map((photo) => <ImageWithFallback key={photo.src} src={photo.src} alt={photo.alt} placeholder="Photographie à venir" className="aspect-[4/3] rounded-2xl" />)}
+          <div className="mx-auto grid max-w-5xl gap-8">
+            {galleryPhotos.map((photo) => (
+              // Les fichiers conservent ici leur format naturel afin qu’aucune photographie ne soit coupée.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={photo.src}
+                src={photo.src}
+                alt={photo.alt}
+                loading="lazy"
+                decoding="async"
+                className="h-auto w-full rounded-2xl bg-white shadow-card"
+              />
+            ))}
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
