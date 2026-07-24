@@ -34,7 +34,6 @@ Il centralise :
 - les éducateurs ;
 - les partenaires ;
 - les événements ;
-- les calendriers de plateaux et de tournois ;
 - les informations du tournoi 2027 ;
 - la navigation.
 
@@ -43,6 +42,14 @@ Les calendriers de la saison sont centralisés séparément dans :
 `src/data/calendar.ts`
 
 Ce fichier contient la liste des mois et les tableaux `seasonEvents.plateaux` et `seasonEvents.tournois`.
+
+Les réunions et les comptes rendus sont centralisés dans :
+
+`src/data/meetings.ts`
+
+La liste des photographies de la galerie est centralisée dans :
+
+`src/data/gallery.ts`
 
 Toutes les informations qui ne sont pas encore officielles affichent volontairement « À venir » ou « Informations à venir ». Ne les remplacer qu’avec des informations validées par l’EDR.
 
@@ -65,8 +72,12 @@ Déposer chaque fichier au chemin exact indiqué ci-dessous. Les composants affi
 | Logos des entreprises | `public/images/partners/entreprises/` |
 | Visuels d’actualité | `public/images/news/` |
 | Visuels du carrousel d’accueil | `public/images/carousel/` |
+| Forum des associations | `public/images/carousel/forums-associations.jpg` |
+| Affiche du tournoi 2027 | `public/images/tournoi/tournoi-2027.jpg` |
+| Portraits du bureau | `public/images/leadership/` |
+| Portraits des éducateurs | `public/images/educators/` |
 | Affiches d’événements | `public/images/events/nom-evenement.jpg` |
-| Photos de galerie | `public/images/gallery/photo-1.jpg`, `photo-2.jpg`, etc. |
+| Photos de galerie LD Studio | `public/images/gallery/ld-studio/` |
 
 Conseils :
 
@@ -77,7 +88,31 @@ Conseils :
 
 ## Ajouter un éducateur
 
-Dans la catégorie concernée dans `src/data/site-content.ts`, ajouter une entrée dans le tableau `educators`. Les cartes sont prévues pour recevoir une photographie, le prénom et le nom, le rôle et une courte présentation. Tant que ces données ne sont pas validées, conserver le tableau vide.
+Dans la catégorie concernée dans `src/data/site-content.ts`, ajouter une entrée dans le tableau `educators`.
+
+```ts
+{
+  name: "Prénom Nom",
+  image: "/images/educators/prenom-nom.jpg",
+  categoryContact: false,
+}
+```
+
+Déposer ensuite le portrait dans `public/images/educators/`. Si `image` est absent ou que le fichier n’existe pas encore, la carte affiche automatiquement « Photo à venir ».
+
+Pour modifier un entraînement, mettre à jour les champs `days`, `hours`, `place` et `address` de la catégorie concernée. Les informations pratiques sont regroupées dans `practical`.
+
+## Ajouter un partenaire
+
+Ajouter une entrée dans `partners.entreprises` ou `partners.mairies` dans `src/data/site-content.ts`. Le champ `officialUrl` est facultatif. Utiliser `hideMissingLink: true` lorsqu’aucun bouton ni aucune mention de lien ne doit être affiché.
+
+Les nouveaux logos attendus sont :
+
+| Partenaire | Fichier attendu |
+|---|---|
+| LD Studio | `public/images/partners/entreprises/ld-studio.png` |
+| RO Maintenance | `public/images/partners/entreprises/ro-maintenance.png` |
+| EM’ASSIST | `public/images/partners/entreprises/em-assist.png` |
 
 ## Ajouter une date au calendrier
 
@@ -113,6 +148,20 @@ Le délai de défilement automatique est défini par `HOME_CAROUSEL_INTERVAL_MS`
 
 Une diapositive peut ne pas avoir d’image. Dans ce cas, le carrousel affiche une carte graphique cohérente avec le site à partir du titre et de la description fournis.
 
+## Ajouter une réunion ou un compte rendu
+
+Dans `src/data/meetings.ts` :
+
+- ajouter les futures réunions dans `meetings` avec la date, l’heure, le lieu, le type de réunion et le public concerné ;
+- déposer les comptes rendus PDF dans `public/documents/reunions/` ;
+- ajouter chaque document dans `meetingMinutes` avec son titre, sa date, sa description et son chemin public.
+
+## Ajouter des photographies à la galerie
+
+1. Déposer les images Web optimisées dans `public/images/gallery/ld-studio/`.
+2. Ajouter chaque fichier dans `galleryPhotos` dans `src/data/gallery.ts`.
+3. Utiliser un texte alternatif général et non identifiant, sans citer le nom d’un enfant.
+
 ## Documents publics
 
 | Document | Chemin public |
@@ -137,11 +186,11 @@ Les logos sont affichés avec `object-fit: contain` et ne sont ni redessinés ni
 | Les Salaisons de Saint-Sauveur | [site officiel de l’entreprise](https://www.salaisonsdesaintsauveur.fr/wp-content/uploads/2025/08/cropped-Logo-StSauveur-CMJN-2.png) |
 | Crédit Agricole Saint-Jory | [Crédit Agricole — logo national officiel](https://www.credit-agricole.fr/content/dam/assetsca/master/public/commun/images/autre/images/NPC-logo_Agir_chaque_jour_CA_H_Desktop-1.svg) |
 
-Les logos Amipub, Super U Bruguières et LD Studio restent volontairement en attente : aucune ressource téléchargeable n’a pu être attribuée au partenaire avec suffisamment de certitude depuis une source officielle. Pour les ajouter, déposer le fichier officiel dans `public/images/partners/entreprises/`, puis renseigner `logo` et `sourceUrl` dans `src/data/site-content.ts`.
+Les logos Amipub et Super U Bruguières restent volontairement en attente. Les chemins des logos LD Studio, RO Maintenance et EM’ASSIST sont déjà configurés : il suffit de déposer les fichiers fournis aux emplacements indiqués plus haut.
 
 ## Pages disponibles
 
-Le site contient l’accueil, la présentation, les six catégories, la boutique, les calendriers de plateaux et tournois, le tournoi 2027, la galerie, les actualités, les cinq événements, les partenaires, le contact, les mentions légales, la politique de confidentialité et une page 404 personnalisée.
+Le site contient l’accueil, la présentation, les six catégories, la boutique, les calendriers de plateaux et tournois, le tournoi 2027, la galerie, les actualités, les six événements, les réunions et comptes rendus, les partenaires, le contact, les mentions légales, la politique de confidentialité et une page 404 personnalisée.
 
 ## Déploiement Vercel
 

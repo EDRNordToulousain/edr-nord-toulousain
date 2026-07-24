@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { documents, news } from "@/data/site-content";
 import { Card, Container, PageHero } from "./UI";
+import { ImageWithFallback } from "./ImageWithFallback";
 
 export function NewsPage() {
   return (
@@ -40,6 +41,28 @@ export function NewsPage() {
             </a>
           </div>
           <p className="mt-4 text-sm text-slate-500">{documents.registration.title} · Document Word</p>
+        </section>
+
+        <section
+          id="forums-associations"
+          aria-labelledby="forums-title"
+          className="mt-12 scroll-mt-28 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-card"
+        >
+          <div className="grid items-center lg:grid-cols-[1.25fr_.75fr]">
+            <ImageWithFallback
+              src="/images/carousel/forums-associations.jpg"
+              alt="Visuel des forums des associations de l’EDR Nord Toulousain"
+              placeholder="Forums des associations"
+              note="Le visuel officiel sera affiché ici dès qu’il sera disponible."
+              objectFit="contain"
+              className="aspect-[4/3] bg-night"
+            />
+            <div className="p-7 sm:p-10">
+              <p className="text-sm font-black uppercase tracking-[.18em] text-red">À la rencontre de l’EDR</p>
+              <h2 id="forums-title" className="mt-2 text-3xl font-black text-night">Retrouvez-nous aux forums des associations</h2>
+              <p className="mt-4 leading-7 text-slate-600">Toutes les informations confirmées figurent sur le visuel officiel.</p>
+            </div>
+          </div>
         </section>
 
         <div className="mt-12 grid gap-7 lg:grid-cols-2">

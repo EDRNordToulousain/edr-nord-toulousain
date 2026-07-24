@@ -15,7 +15,7 @@ export function Header() {
           <Logo compact />
           <span className="hidden text-sm font-black uppercase leading-tight tracking-wide sm:block">EDR Nord<br />Toulousain</span>
         </Link>
-        <nav aria-label="Navigation principale" className="ml-auto hidden items-center xl:flex">
+        <nav aria-label="Navigation principale" className="ml-auto hidden items-center 2xl:flex">
           {navigation.map((item) => (
             <div key={item.href} className="group relative">
               <Link href={item.href} className="block rounded-lg px-2.5 py-3 text-sm font-semibold text-white/85 transition hover:bg-white/10 hover:text-white focus:bg-white/10 focus:outline-none">
@@ -29,13 +29,13 @@ export function Header() {
             </div>
           ))}
         </nav>
-        <Link href="/contact" className="ml-auto hidden rounded-full bg-red px-5 py-3 text-sm font-bold transition hover:bg-coral focus:outline-none focus:ring-2 focus:ring-white sm:inline-flex xl:ml-3">Nous contacter</Link>
-        <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="mobile-menu" aria-label="Ouvrir le menu" className="ml-auto grid h-12 w-12 place-items-center rounded-xl bg-white/10 text-2xl xl:hidden">
+        <Link href="/contact" className="ml-auto hidden rounded-full bg-red px-5 py-3 text-sm font-bold transition hover:bg-coral focus:outline-none focus:ring-2 focus:ring-white sm:inline-flex 2xl:ml-3">Nous contacter</Link>
+        <button type="button" onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="mobile-menu" aria-label={open ? "Fermer le menu" : "Ouvrir le menu"} className="ml-auto grid h-12 w-12 place-items-center rounded-xl bg-white/10 text-2xl 2xl:hidden">
           {open ? "×" : "☰"}
         </button>
       </div>
       {open && (
-        <nav id="mobile-menu" aria-label="Navigation mobile" className="max-h-[calc(100vh-5rem)] overflow-y-auto border-t border-white/10 px-4 py-4 xl:hidden">
+        <nav id="mobile-menu" aria-label="Navigation mobile" className="max-h-[calc(100vh-5rem)] overflow-y-auto border-t border-white/10 px-4 py-4 2xl:hidden">
           {navigation.map((item) => "children" in item && item.children ? (
             <details key={item.href} className="border-b border-white/10 py-1">
               <summary className="cursor-pointer py-3 font-bold">{item.label}</summary>

@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   enabledHomeCarouselSlides,
   HOME_CAROUSEL_INTERVAL_MS,
 } from "@/data/home-carousel";
+import { ImageWithFallback } from "./ImageWithFallback";
 
 export function HomeNewsCarousel() {
   const slides = enabledHomeCarouselSlides;
@@ -121,13 +121,13 @@ export function HomeNewsCarousel() {
                 className="relative grid min-h-[34rem] place-items-center overflow-hidden bg-[radial-gradient(circle_at_top,#246bce_0%,#0b1f3a_58%)] p-4 sm:min-h-[44rem] sm:p-8 lg:min-h-[48rem]"
               >
                 {activeSlide.image ? (
-                  <Image
+                  <ImageWithFallback
                     src={activeSlide.image}
                     alt={activeSlide.imageAlt}
-                    fill
-                    priority={activeIndex === 0}
-                    sizes="(min-width: 1024px) 960px, 100vw"
-                    className="object-contain p-3 sm:p-6"
+                    placeholder={activeSlide.title}
+                    note={activeSlide.description}
+                    objectFit="contain"
+                    className="absolute inset-0 h-full w-full"
                   />
                 ) : (
                   <div className="field-lines relative z-10 flex min-h-[28rem] w-full max-w-3xl flex-col items-center justify-center rounded-3xl border border-white/15 bg-white/10 px-6 py-12 text-center text-white sm:min-h-[36rem] sm:px-12">

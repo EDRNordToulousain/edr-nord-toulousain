@@ -6,28 +6,190 @@ export const site = {
     "Découvrez l’École de Rugby Nord Toulousain, ses catégories du Baby Rugby aux U14, son calendrier, ses événements, ses partenaires et son tournoi annuel.",
   address: ["2 rue de Verdun", "31790 Saint-Jory"],
   email: "contact.edrnordtoulousain@gmail.com",
+  partnershipEmail: "partenaires.edrnordtoulousain@gmail.com",
+  siret: "924 035 793 00018",
   social: "Réseaux sociaux à venir",
   canonicalUrl: "https://www.edr-nordtoulousain.fr",
 } as const;
 
-export const categories = [
-  { slug: "baby", name: "Baby Rugby", photoLabel: "PHOTO ÉQUIPE BABY", intro: "Une première découverte du rugby dans un cadre ludique, rassurant et collectif." },
-  { slug: "u6", name: "U6", photoLabel: "PHOTO ÉQUIPE U6", intro: "Une catégorie pour découvrir le plaisir de jouer ensemble et progresser à son rythme." },
-  { slug: "u8", name: "U8", photoLabel: "PHOTO ÉQUIPE U8", intro: "Les enfants développent leur pratique dans un environnement ludique, progressif et collectif." },
-  { slug: "u10", name: "U10", photoLabel: "PHOTO ÉQUIPE U10", intro: "Une étape pour continuer à apprendre, prendre confiance et partager le plaisir du collectif." },
-  { slug: "u12", name: "U12", photoLabel: "PHOTO ÉQUIPE U12", intro: "Les jeunes joueuses et joueurs poursuivent leur progression sportive et humaine ensemble." },
-  { slug: "u14", name: "U14", photoLabel: "PHOTO ÉQUIPE U14", intro: "Une catégorie tournée vers la progression, l’engagement et l’esprit d’équipe." },
-].map((category) => ({
-  ...category,
-  image: `/images/categories/${category.slug}.jpg`,
-  training: { days: "À venir", hours: "À venir", place: "À venir", address: "À venir" },
-  educators: [],
+export type Educator = {
+  name: string;
+  image?: string;
+  categoryContact?: boolean;
+  pendingLabel?: string;
+};
+
+export type Category = {
+  slug: string;
+  name: string;
+  photoLabel: string;
+  intro: string;
+  image: string;
+  training: {
+    days: string;
+    hours: string;
+    place: string;
+    address: string;
+  };
+  educators: readonly Educator[];
   practical: {
-    equipment: "Informations à venir",
-    documents: "Informations à venir",
-    contact: "Informations à venir",
+    equipment: string;
+    documents: string;
+    contact: string;
+  };
+};
+
+export const categories: readonly Category[] = [
+  {
+    slug: "baby",
+    name: "Baby Rugby",
+    photoLabel: "PHOTO ÉQUIPE BABY",
+    intro: "Une première découverte du rugby dans un cadre ludique, rassurant et collectif.",
+    image: "/images/categories/baby.jpg",
+    training: {
+      days: "Samedi",
+      hours: "De 10 h 30 à 11 h 30",
+      place: "Stade David Berty",
+      address: "Saint-Jory, 31790",
+    },
+    educators: [
+      { name: "Tiphaine Plagnol", image: "/images/educators/tiphaine-plagnol.jpg", categoryContact: true },
+      { name: "Éducateur supplémentaire", pendingLabel: "Éducateur supplémentaire à venir" },
+    ],
+    practical: {
+      equipment: "Tenue de sport",
+      documents: "Dossier d’inscription",
+      contact: "Tiphaine Plagnol",
+    },
   },
-}));
+  {
+    slug: "u6",
+    name: "U6",
+    photoLabel: "PHOTO ÉQUIPE U6",
+    intro: "Une catégorie pour découvrir le plaisir de jouer ensemble et progresser à son rythme.",
+    image: "/images/categories/u6.jpg",
+    training: {
+      days: "Mercredi",
+      hours: "De 17 h 00 à 18 h 00",
+      place: "Stade David Berty",
+      address: "Saint-Jory, 31790",
+    },
+    educators: [
+      { name: "Kamélia Belkacem", image: "/images/educators/kamelia-belkacem.jpg", categoryContact: true },
+      { name: "Jean-Luc Ravin" },
+      { name: "Florian Dubois" },
+    ],
+    practical: {
+      equipment: "Tenue de sport, crampons et protège-dents",
+      documents: "Dossier d’inscription",
+      contact: "Kamélia Belkacem",
+    },
+  },
+  {
+    slug: "u8",
+    name: "U8",
+    photoLabel: "PHOTO ÉQUIPE U8",
+    intro: "Les enfants développent leur pratique dans un environnement ludique, progressif et collectif.",
+    image: "/images/categories/u8.jpg",
+    training: {
+      days: "Mercredi",
+      hours: "De 17 h 00 à 18 h 30",
+      place: "Stade David Berty",
+      address: "Saint-Jory, 31790",
+    },
+    educators: [
+      { name: "Alexandre Ruzzante", image: "/images/educators/alexandre-ruzzante.jpg", categoryContact: true },
+      { name: "Philippe Salvatge", image: "/images/educators/philippe-salvatge.jpg" },
+      { name: "Thierry Serre", image: "/images/educators/thierry-serre.jpg" },
+      { name: "Audrey Mechenet", image: "/images/educators/audrey-mechenet.jpg" },
+      { name: "Mathieu Ricard", image: "/images/educators/mathieu-ricard.jpg" },
+      { name: "Marie-Eve Alcaraz", image: "/images/educators/marie-eve-alcaraz.jpg" },
+    ],
+    practical: {
+      equipment: "Tenue de sport, crampons et protège-dents",
+      documents: "Dossier d’inscription",
+      contact: "Alexandre Ruzzante",
+    },
+  },
+  {
+    slug: "u10",
+    name: "U10",
+    photoLabel: "PHOTO ÉQUIPE U10",
+    intro: "Une étape pour continuer à apprendre, prendre confiance et partager le plaisir du collectif.",
+    image: "/images/categories/u10.jpg",
+    training: {
+      days: "Mercredi et vendredi",
+      hours: "Mercredi de 17 h 30 à 19 h 00 · Vendredi de 18 h 00 à 19 h 00",
+      place: "Stade David Berty",
+      address: "Saint-Jory, 31790",
+    },
+    educators: [
+      { name: "Pierre Peries", categoryContact: true },
+      { name: "Bruno Cattaï" },
+      { name: "Romain Gomes" },
+      { name: "Mathieu Jeannesson" },
+      { name: "Loic Szcypta" },
+      { name: "Bruno Malandain", image: "/images/educators/bruno-malandain.jpg" },
+    ],
+    practical: {
+      equipment: "Tenue de sport, crampons et protège-dents",
+      documents: "Dossier d’inscription",
+      contact: "Pierre Peries",
+    },
+  },
+  {
+    slug: "u12",
+    name: "U12",
+    photoLabel: "PHOTO ÉQUIPE U12",
+    intro: "Les jeunes joueuses et joueurs poursuivent leur progression sportive et humaine ensemble.",
+    image: "/images/categories/u12.jpg",
+    training: {
+      days: "Mercredi et vendredi",
+      hours: "Mercredi de 17 h 30 à 19 h 00 · Vendredi de 18 h 00 à 19 h 00",
+      place: "Stade David Berty",
+      address: "Saint-Jory, 31790",
+    },
+    educators: [
+      { name: "Clément Sorbes-Ballesteros", image: "/images/educators/clement-sorbes-ballesteros.jpg", categoryContact: true },
+      { name: "Romain Destarac", image: "/images/leadership/romain-destarac.jpg" },
+      { name: "Badre Saddik", image: "/images/educators/badre-saddik.jpg" },
+      { name: "Pierre Cabot" },
+      { name: "Mathieu Maurieres", image: "/images/educators/mathieu-maurieres.jpg" },
+      { name: "Stephan Delattre", image: "/images/educators/stephan-delattre.jpg" },
+      { name: "Xavier Gratzer", image: "/images/educators/xavier-gratzer.jpg" },
+    ],
+    practical: {
+      equipment: "Tenue de sport, crampons et protège-dents",
+      documents: "Dossier d’inscription",
+      contact: "Clément Sorbes-Ballesteros",
+    },
+  },
+  {
+    slug: "u14",
+    name: "U14",
+    photoLabel: "PHOTO ÉQUIPE U14",
+    intro: "Une catégorie tournée vers la progression, l’engagement et l’esprit d’équipe.",
+    image: "/images/categories/u14.jpg",
+    training: {
+      days: "Mercredi et vendredi",
+      hours: "Mercredi de 18 h 30 à 20 h 00 · Vendredi de 18 h 00 à 19 h 00",
+      place: "Complexe sportif René Albus",
+      address: "Bruguières, 31150",
+    },
+    educators: [
+      { name: "Alexis Komaroff", image: "/images/educators/alexis-komaroff.jpg", categoryContact: true },
+      { name: "Clément Chavaux", image: "/images/educators/clement-chavaux.jpg" },
+      { name: "Pierre Badens", image: "/images/educators/pierre-badens.jpg" },
+      { name: "Nathan Bonnin" },
+      { name: "Christophe Bonnin" },
+    ],
+    practical: {
+      equipment: "Tenue de sport, crampons et protège-dents",
+      documents: "Dossier d’inscription",
+      contact: "Alexis Komaroff",
+    },
+  },
+];
 
 export const values = [
   ["Respect", "Écouter, considérer les autres et grandir ensemble."],
@@ -41,8 +203,10 @@ export type Partner = {
   name: string;
   logo?: string;
   officialUrl?: string;
+  linkLabel?: string;
   sourceUrl?: string;
   note?: string;
+  hideMissingLink?: boolean;
 };
 
 export const partners: { mairies: readonly Partner[]; entreprises: readonly Partner[] } = {
@@ -59,15 +223,30 @@ export const partners: { mairies: readonly Partner[]; entreprises: readonly Part
     { name: "Super U Bruguières", officialUrl: "https://www.magasins-u.com/magasin/superu-bruguieres", note: "Logo officiel à fournir" },
     { name: "Les Salaisons de Saint-Sauveur", logo: "/images/partners/entreprises/salaisons-saint-sauveur.png", officialUrl: "https://www.salaisonsdesaintsauveur.fr/", sourceUrl: "https://www.salaisonsdesaintsauveur.fr/wp-content/uploads/2025/08/cropped-Logo-StSauveur-CMJN-2.png" },
     { name: "Crédit Agricole Saint-Jory", logo: "/images/partners/entreprises/credit-agricole.svg", officialUrl: "https://www.credit-agricole.fr/particulier/agence/toulouse-31/saint-jory-4675.html", sourceUrl: "https://www.credit-agricole.fr/content/dam/assetsca/master/public/commun/images/autre/images/NPC-logo_Agir_chaque_jour_CA_H_Desktop-1.svg", note: "Logo national officiel" },
-    { name: "LD Studio", note: "Identification du partenaire à confirmer" },
+    {
+      name: "LD Studio",
+      logo: "/images/partners/entreprises/ld-studio.png",
+      officialUrl: "https://www.instagram.com/ldstudio31/",
+      linkLabel: "Découvrir LD Studio sur Instagram",
+    },
+    {
+      name: "RO Maintenance",
+      logo: "/images/partners/entreprises/ro-maintenance.png",
+      hideMissingLink: true,
+    },
+    {
+      name: "EM’ASSIST",
+      logo: "/images/partners/entreprises/em-assist.png",
+      hideMissingLink: true,
+    },
   ],
 };
 
 export const leadership = [
-  { familyName: "DESTARAC", givenName: "Romain", displayName: "Romain Destarac", role: "Co-président" },
-  { familyName: "SIMON", givenName: "Séverine", displayName: "Séverine Simon", role: "Co-présidente" },
-  { familyName: "SORBES-BALLESTEROS", givenName: "Leslie", displayName: "Leslie Sorbes-Ballesteros", role: "Trésorière" },
-  { familyName: "CABOT", givenName: "Peggy", displayName: "Peggy Cabot", role: "Secrétaire" },
+  { familyName: "DESTARAC", givenName: "Romain", displayName: "Romain Destarac", role: "Co-président", image: "/images/leadership/romain-destarac.jpg" },
+  { familyName: "SIMON", givenName: "Séverine", displayName: "Séverine Simon", role: "Co-présidente", image: "/images/leadership/severine-simon.jpg" },
+  { familyName: "SORBES-BALLESTEROS", givenName: "Leslie", displayName: "Leslie Sorbes-Ballesteros", role: "Trésorière", image: "/images/leadership/leslie-sorbes-ballesteros.jpg" },
+  { familyName: "CABOT", givenName: "Peggy", displayName: "Peggy Cabot", role: "Secrétaire", image: "/images/leadership/peggy-cabot.jpg" },
 ] as const;
 
 export const clubHistory = [
@@ -104,11 +283,12 @@ export const news = [
 ] as const;
 
 export const events = [
-  { slug: "loto", title: "Loto de l’EDR Nord Toulousain" },
-  { slug: "tombola", title: "Tombola de l’EDR Nord Toulousain" },
-  { slug: "noel", title: "Noël de l’EDR Nord Toulousain" },
-  { slug: "calendrier", title: "Le calendrier de l’EDR Nord Toulousain" },
-  { slug: "vide-grenier", title: "Vide-grenier de l’EDR Nord Toulousain" },
+  { slug: "loto", title: "Nos lotos" },
+  { slug: "tombola", title: "Notre tombola" },
+  { slug: "noel", title: "Noël de l’EDR", date: "12 décembre" },
+  { slug: "calendrier", title: "Vente de calendrier" },
+  { slug: "vide-grenier", title: "Notre vide-grenier" },
+  { slug: "voyage-fin-annee", title: "Notre voyage de fin d’année", categories: "U10 · U12 · U14" },
 ] as const;
 
 export const navigation = [
@@ -134,7 +314,15 @@ export const navigation = [
   {
     label: "Événements",
     href: "/evenements",
-    children: events.map(({ title, slug }) => ({ label: title.split(" de l’")[0], href: `/evenements/${slug}` })),
+    children: events.map(({ title, slug }) => ({ label: title, href: `/evenements/${slug}` })),
+  },
+  {
+    label: "Réunions",
+    href: "/reunions",
+    children: [
+      { label: "Calendrier des réunions", href: "/reunions/calendrier" },
+      { label: "Comptes rendus", href: "/reunions/comptes-rendus" },
+    ],
   },
   {
     label: "Partenaires",
@@ -149,6 +337,7 @@ export const navigation = [
 export const tournament2027 = {
   date: "Samedi 5 juin 2027",
   target: "2027-06-05T00:00:00+02:00",
+  poster: "/images/tournoi/tournoi-2027.jpg",
   place: "À venir",
   categories: "À venir",
   hours: "À venir",
@@ -171,6 +360,9 @@ export const allPaths = [
   "/actualites",
   "/evenements",
   ...events.map((event) => `/evenements/${event.slug}`),
+  "/reunions",
+  "/reunions/calendrier",
+  "/reunions/comptes-rendus",
   "/partenaires",
   "/partenaires/mairies",
   "/partenaires/entreprises",

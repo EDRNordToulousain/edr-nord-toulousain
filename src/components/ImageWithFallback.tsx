@@ -8,9 +8,10 @@ type Props = {
   placeholder: string;
   note?: string;
   className?: string;
+  objectFit?: "cover" | "contain";
 };
 
-export function ImageWithFallback({ src, alt, placeholder, note, className = "" }: Props) {
+export function ImageWithFallback({ src, alt, placeholder, note, className = "", objectFit = "cover" }: Props) {
   const [failed, setFailed] = useState(false);
 
   return (
@@ -21,7 +22,7 @@ export function ImageWithFallback({ src, alt, placeholder, note, className = "" 
         <img
           src={src}
           alt={alt}
-          className="absolute inset-0 h-full w-full object-cover"
+          className={`absolute inset-0 h-full w-full ${objectFit === "contain" ? "object-contain p-3" : "object-cover"}`}
           onError={() => setFailed(true)}
         />
       )}

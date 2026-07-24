@@ -1,16 +1,16 @@
 import { documents, partners, type Partner } from "@/data/site-content";
 import { Card, Container, PageHero, SectionTitle } from "./UI";
-import Image from "next/image";
 import Link from "next/link";
+import { ImageWithFallback } from "./ImageWithFallback";
 
 function PartnerCard({ partner }: { partner: Partner }) {
   return <Card className="flex h-full flex-col text-center">
     <div className="relative grid aspect-[3/2] place-items-center rounded-2xl border border-slate-200 bg-slate-50 p-5">
-      {partner.logo ? <Image src={partner.logo} alt={`Logo officiel — ${partner.name}`} fill sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 90vw" className="p-5 object-contain" /> : <span className="text-sm font-black uppercase tracking-wide text-slate-400">Logo officiel à fournir</span>}
+      {partner.logo ? <ImageWithFallback src={partner.logo} alt={`Logo officiel — ${partner.name}`} placeholder="Logo officiel à fournir" objectFit="contain" className="absolute inset-0 h-full w-full" /> : <span className="text-sm font-black uppercase tracking-wide text-slate-400">Logo officiel à fournir</span>}
     </div>
     <h2 className="mt-5 text-xl font-black text-night">{partner.name}</h2>
     {partner.note && <p className="mt-2 text-sm text-slate-500">{partner.note}</p>}
-    <div className="mt-auto pt-5">{partner.officialUrl ? <a href={partner.officialUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center rounded-full bg-blue px-5 py-3 font-bold text-white transition hover:bg-night focus:outline-none focus:ring-2 focus:ring-blue focus:ring-offset-2">Visiter le site officiel<span className="sr-only"> de {partner.name} (nouvel onglet)</span></a> : <span className="text-sm font-bold text-slate-500">Lien officiel à venir</span>}</div>
+    <div className="mt-auto pt-5">{partner.officialUrl ? <a href={partner.officialUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center rounded-full bg-blue px-5 py-3 font-bold text-white transition hover:bg-night focus:outline-none focus:ring-2 focus:ring-blue focus:ring-offset-2">{partner.linkLabel ?? "Visiter le site officiel"}<span className="sr-only"> de {partner.name} (nouvel onglet)</span></a> : partner.hideMissingLink ? null : <span className="text-sm font-bold text-slate-500">Lien officiel à venir</span>}</div>
   </Card>;
 }
 
