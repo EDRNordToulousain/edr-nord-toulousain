@@ -63,11 +63,11 @@ Déposer chaque fichier au chemin exact indiqué ci-dessous. Les composants affi
 | Grande photo d’accueil | `public/images/hero-enfants-edr.jpg` |
 | Photo de groupe de présentation | `public/images/presentation-groupe.jpg` |
 | Équipe Baby Rugby | `public/images/categories/baby.jpg` |
-| Équipe U6 | `public/images/categories/u6.jpg` |
-| Équipe U8 | `public/images/categories/u8.jpg` |
-| Équipe U10 | `public/images/categories/u10.jpg` |
-| Équipe U12 | `public/images/categories/u12.jpg` |
-| Équipe U14 | `public/images/categories/u14.jpg` |
+| Équipe U6 | `public/images/categories/u6.png` |
+| Équipe U8 | `public/images/categories/u8.png` |
+| Équipe U10 | `public/images/categories/u10.png` |
+| Équipe U12 | `public/images/categories/u12.png` |
+| Équipe U14 | `public/images/categories/u14.png` |
 | Logos des mairies | `public/images/partners/mairies/` |
 | Logos des entreprises | `public/images/partners/entreprises/` |
 | Visuels d’actualité | `public/images/news/` |

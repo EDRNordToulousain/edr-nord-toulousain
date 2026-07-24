@@ -68,7 +68,7 @@ export const categories: readonly Category[] = [
     name: "U6",
     photoLabel: "PHOTO ÉQUIPE U6",
     intro: "Une catégorie pour découvrir le plaisir de jouer ensemble et progresser à son rythme.",
-    image: "/images/categories/u6.jpg",
+    image: "/images/categories/u6.png",
     training: {
       days: "Mercredi",
       hours: "De 17 h 00 à 18 h 00",
@@ -91,7 +91,7 @@ export const categories: readonly Category[] = [
     name: "U8",
     photoLabel: "PHOTO ÉQUIPE U8",
     intro: "Les enfants développent leur pratique dans un environnement ludique, progressif et collectif.",
-    image: "/images/categories/u8.jpg",
+    image: "/images/categories/u8.png",
     training: {
       days: "Mercredi",
       hours: "De 17 h 00 à 18 h 30",
@@ -117,7 +117,7 @@ export const categories: readonly Category[] = [
     name: "U10",
     photoLabel: "PHOTO ÉQUIPE U10",
     intro: "Une étape pour continuer à apprendre, prendre confiance et partager le plaisir du collectif.",
-    image: "/images/categories/u10.jpg",
+    image: "/images/categories/u10.png",
     training: {
       days: "Mercredi et vendredi",
       hours: "Mercredi de 17 h 30 à 19 h 00 · Vendredi de 18 h 00 à 19 h 00",
@@ -143,7 +143,7 @@ export const categories: readonly Category[] = [
     name: "U12",
     photoLabel: "PHOTO ÉQUIPE U12",
     intro: "Les jeunes joueuses et joueurs poursuivent leur progression sportive et humaine ensemble.",
-    image: "/images/categories/u12.jpg",
+    image: "/images/categories/u12.png",
     training: {
       days: "Mercredi et vendredi",
       hours: "Mercredi de 17 h 30 à 19 h 00 · Vendredi de 18 h 00 à 19 h 00",
@@ -170,7 +170,7 @@ export const categories: readonly Category[] = [
     name: "U14",
     photoLabel: "PHOTO ÉQUIPE U14",
     intro: "Une catégorie tournée vers la progression, l’engagement et l’esprit d’équipe.",
-    image: "/images/categories/u14.jpg",
+    image: "/images/categories/u14.png",
     training: {
       days: "Mercredi et vendredi",
       hours: "Mercredi de 18 h 30 à 20 h 00 · Vendredi de 18 h 00 à 19 h 00",
