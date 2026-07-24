@@ -9,13 +9,14 @@ type Props = {
   note?: string;
   className?: string;
   objectFit?: "cover" | "contain";
+  background?: "dark" | "light";
 };
 
-export function ImageWithFallback({ src, alt, placeholder, note, className = "", objectFit = "cover" }: Props) {
+export function ImageWithFallback({ src, alt, placeholder, note, className = "", objectFit = "cover", background = "dark" }: Props) {
   const [failed, setFailed] = useState(false);
 
   return (
-    <div className={`relative overflow-hidden bg-night ${className}`}>
+    <div className={`relative overflow-hidden ${background === "light" ? "bg-white" : "bg-night"} ${className}`}>
       {!failed && (
         // Une balise img permet d’activer proprement le fallback lorsqu’un futur fichier est absent.
         // eslint-disable-next-line @next/next/no-img-element

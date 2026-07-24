@@ -6,7 +6,7 @@ import { ImageWithFallback } from "./ImageWithFallback";
 function PartnerCard({ partner }: { partner: Partner }) {
   return <Card className="flex h-full flex-col text-center">
     <div className="relative grid aspect-[3/2] place-items-center rounded-2xl border border-slate-200 bg-slate-50 p-5">
-      {partner.logo ? <ImageWithFallback src={partner.logo} alt={`Logo officiel — ${partner.name}`} placeholder="Logo officiel à fournir" objectFit="contain" className="absolute inset-0 h-full w-full" /> : <span className="text-sm font-black uppercase tracking-wide text-slate-400">Logo officiel à fournir</span>}
+      {partner.logo ? <ImageWithFallback src={partner.logo} alt={`Logo officiel — ${partner.name}`} placeholder="Logo officiel à fournir" objectFit="contain" background="light" className="absolute inset-0 h-full w-full" /> : <span className="text-sm font-black uppercase tracking-wide text-slate-400">Logo officiel à fournir</span>}
     </div>
     <h2 className="mt-5 text-xl font-black text-night">{partner.name}</h2>
     {partner.note && <p className="mt-2 text-sm text-slate-500">{partner.note}</p>}

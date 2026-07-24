@@ -72,8 +72,9 @@ Déposer chaque fichier au chemin exact indiqué ci-dessous. Les composants affi
 | Logos des entreprises | `public/images/partners/entreprises/` |
 | Visuels d’actualité | `public/images/news/` |
 | Visuels du carrousel d’accueil | `public/images/carousel/` |
-| Forum des associations | `public/images/carousel/forums-associations.jpg` |
-| Affiche du tournoi 2027 | `public/images/tournoi/tournoi-2027.jpg` |
+| Forum des associations | `public/images/carousel/forums-associations.jpeg` |
+| Affiche du tournoi 2027 | `public/images/tournoi/tournoi-2027.jpeg` |
+| Galerie LD Studio | `public/images/gallery/ld-studio/ld-studio-01.jpg` à `ld-studio-20.jpg` |
 | Portraits du bureau | `public/images/leadership/` |
 | Portraits des éducateurs | `public/images/educators/` |
 | Affiches d’événements | `public/images/events/nom-evenement.jpg` |
@@ -111,7 +112,7 @@ Les nouveaux logos attendus sont :
 | Partenaire | Fichier attendu |
 |---|---|
 | LD Studio | `public/images/partners/entreprises/ld-studio.png` |
-| RO Maintenance | `public/images/partners/entreprises/ro-maintenance.png` |
+| RO Maintenance | `public/images/partners/entreprises/ro-maintenance.jpg` |
 | EM’ASSIST | `public/images/partners/entreprises/em-assist.png` |
 
 ## Ajouter une date au calendrier

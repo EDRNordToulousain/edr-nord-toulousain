@@ -58,7 +58,7 @@ export function HomeNewsCarousel() {
         </div>
 
         <div
-          className="relative mx-auto mt-8 max-w-5xl touch-pan-y outline-none sm:mt-10"
+          className="relative mx-auto mt-8 max-w-xl touch-pan-y outline-none sm:mt-10"
           role="region"
           aria-roledescription="carrousel"
           aria-label="Informations à la une"
@@ -105,7 +105,7 @@ export function HomeNewsCarousel() {
             Diapositive {activeIndex + 1} sur {slides.length} : {activeSlide.title}
           </p>
 
-          <div className="overflow-hidden rounded-[2rem] bg-night shadow-card ring-1 ring-night/10">
+          <div className="overflow-hidden rounded-[2rem] bg-white shadow-card ring-1 ring-night/10">
             <Link
               href={activeSlide.href}
               onClick={(event) => {
@@ -117,9 +117,7 @@ export function HomeNewsCarousel() {
               className="group relative block focus:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-coral"
               aria-label={`${activeSlide.title} — ${activeSlide.buttonLabel}`}
             >
-              <div
-                className="relative grid min-h-[34rem] place-items-center overflow-hidden bg-[radial-gradient(circle_at_top,#246bce_0%,#0b1f3a_58%)] p-4 sm:min-h-[44rem] sm:p-8 lg:min-h-[48rem]"
-              >
+              <div className="relative aspect-[2/3] w-full overflow-hidden bg-white">
                 {activeSlide.image ? (
                   <ImageWithFallback
                     src={activeSlide.image}
@@ -127,6 +125,7 @@ export function HomeNewsCarousel() {
                     placeholder={activeSlide.title}
                     note={activeSlide.description}
                     objectFit="contain"
+                    background="light"
                     className="absolute inset-0 h-full w-full"
                   />
                 ) : (

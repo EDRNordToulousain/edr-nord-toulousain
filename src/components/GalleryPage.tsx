@@ -11,7 +11,7 @@ export function GalleryPage() {
         <section className="mb-10 flex flex-col items-center justify-between gap-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-card sm:flex-row">
           <p className="text-lg font-black text-night">Photos réalisées par notre partenaire LD Studio</p>
           <Link href="https://www.instagram.com/ldstudio31/" target="_blank" rel="noopener noreferrer" className="flex min-h-16 items-center gap-3 rounded-2xl px-3 py-2 font-bold text-blue transition hover:bg-mist">
-            <ImageWithFallback src="/images/partners/entreprises/ld-studio.png" alt="Logo LD Studio" placeholder="LD Studio" objectFit="contain" className="h-16 w-28 rounded-xl" />
+            <ImageWithFallback src="/images/partners/entreprises/ld-studio.png" alt="Logo LD Studio" placeholder="LD Studio" objectFit="contain" background="light" className="h-16 w-28 rounded-xl" />
             <span>Voir sur Instagram<span className="sr-only"> (nouvel onglet)</span></span>
           </Link>
         </section>

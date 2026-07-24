@@ -50,7 +50,7 @@ export function NewsPage() {
         >
           <div className="grid items-center lg:grid-cols-[1.25fr_.75fr]">
             <ImageWithFallback
-              src="/images/carousel/forums-associations.jpg"
+              src="/images/carousel/forums-associations.jpeg"
               alt="Visuel des forums des associations de l’EDR Nord Toulousain"
               placeholder="Forums des associations"
               note="Le visuel officiel sera affiché ici dès qu’il sera disponible."

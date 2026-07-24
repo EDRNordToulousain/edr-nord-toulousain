@@ -3,7 +3,10 @@ export type GalleryPhoto = {
   alt: string;
 };
 
-// Les photos du ZIP n’étaient pas disponibles dans l’espace de travail de cette mise à jour.
-// Après ajout dans /public/images/gallery/ld-studio/, renseigner ici une description
-// générale et non identifiante pour chaque image.
-export const galleryPhotos: readonly GalleryPhoto[] = [];
+export const galleryPhotos: readonly GalleryPhoto[] = Array.from(
+  { length: 20 },
+  (_, index) => ({
+    src: `/images/gallery/ld-studio/ld-studio-${String(index + 1).padStart(2, "0")}.jpg`,
+    alt: `Moment de vie à l’EDR Nord Toulousain — photographie ${index + 1}`,
+  }),
+);

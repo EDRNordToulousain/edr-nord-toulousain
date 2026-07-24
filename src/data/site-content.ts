@@ -53,7 +53,7 @@ export const categories: readonly Category[] = [
       address: "Saint-Jory, 31790",
     },
     educators: [
-      { name: "Tiphaine Plagnol", image: "/images/educators/tiphaine-plagnol.jpg", categoryContact: true },
+      { name: "Tiphaine Plagnol", image: "/images/educators/tiphaine-plagnol.jpeg", categoryContact: true },
       { name: "Éducateur supplémentaire", pendingLabel: "Éducateur supplémentaire à venir" },
     ],
     practical: {
@@ -75,7 +75,7 @@ export const categories: readonly Category[] = [
       address: "Saint-Jory, 31790",
     },
     educators: [
-      { name: "Kamélia Belkacem", image: "/images/educators/kamelia-belkacem.jpg", categoryContact: true },
+      { name: "Kamélia Belkacem", image: "/images/educators/kamelia-belkacem.jpeg", categoryContact: true },
       { name: "Jean-Luc Ravin" },
       { name: "Florian Dubois" },
     ],
@@ -98,12 +98,12 @@ export const categories: readonly Category[] = [
       address: "Saint-Jory, 31790",
     },
     educators: [
-      { name: "Alexandre Ruzzante", image: "/images/educators/alexandre-ruzzante.jpg", categoryContact: true },
-      { name: "Philippe Salvatge", image: "/images/educators/philippe-salvatge.jpg" },
-      { name: "Thierry Serre", image: "/images/educators/thierry-serre.jpg" },
-      { name: "Audrey Mechenet", image: "/images/educators/audrey-mechenet.jpg" },
-      { name: "Mathieu Ricard", image: "/images/educators/mathieu-ricard.jpg" },
-      { name: "Marie-Eve Alcaraz", image: "/images/educators/marie-eve-alcaraz.jpg" },
+      { name: "Alexandre Ruzzante", image: "/images/educators/alexandre-ruzzante.png", categoryContact: true },
+      { name: "Philippe Salvatge", image: "/images/educators/philippe-salvatge.jpeg" },
+      { name: "Thierry Serre", image: "/images/educators/thierry-serre.png" },
+      { name: "Audrey Mechenet", image: "/images/educators/audrey-mechenet.jpeg" },
+      { name: "Mathieu Ricard", image: "/images/educators/mathieu-ricard.png" },
+      { name: "Marie-Eve Alcaraz", image: "/images/educators/marie-eve-alcaraz.jpeg" },
     ],
     practical: {
       equipment: "Tenue de sport, crampons et protège-dents",
@@ -129,7 +129,7 @@ export const categories: readonly Category[] = [
       { name: "Romain Gomes" },
       { name: "Mathieu Jeannesson" },
       { name: "Loic Szcypta" },
-      { name: "Bruno Malandain", image: "/images/educators/bruno-malandain.jpg" },
+      { name: "Bruno Malandain", image: "/images/educators/bruno-malandain.jpeg" },
     ],
     practical: {
       equipment: "Tenue de sport, crampons et protège-dents",
@@ -151,12 +151,12 @@ export const categories: readonly Category[] = [
     },
     educators: [
       { name: "Clément Sorbes-Ballesteros", image: "/images/educators/clement-sorbes-ballesteros.jpg", categoryContact: true },
-      { name: "Romain Destarac", image: "/images/leadership/romain-destarac.jpg" },
-      { name: "Badre Saddik", image: "/images/educators/badre-saddik.jpg" },
+      { name: "Romain Destarac", image: "/images/leadership/romain-destarac.jpeg" },
+      { name: "Badre Saddik", image: "/images/educators/badre-saddik.jpeg" },
       { name: "Pierre Cabot" },
-      { name: "Mathieu Maurieres", image: "/images/educators/mathieu-maurieres.jpg" },
-      { name: "Stephan Delattre", image: "/images/educators/stephan-delattre.jpg" },
-      { name: "Xavier Gratzer", image: "/images/educators/xavier-gratzer.jpg" },
+      { name: "Mathieu Maurieres", image: "/images/educators/mathieu-maurieres.jpeg" },
+      { name: "Stephan Delattre", image: "/images/educators/stephan-delattre.jpeg" },
+      { name: "Xavier Gratzer", image: "/images/educators/xavier-gratzer.jpeg" },
     ],
     practical: {
       equipment: "Tenue de sport, crampons et protège-dents",
@@ -177,9 +177,9 @@ export const categories: readonly Category[] = [
       address: "Bruguières, 31150",
     },
     educators: [
-      { name: "Alexis Komaroff", image: "/images/educators/alexis-komaroff.jpg", categoryContact: true },
-      { name: "Clément Chavaux", image: "/images/educators/clement-chavaux.jpg" },
-      { name: "Pierre Badens", image: "/images/educators/pierre-badens.jpg" },
+      { name: "Alexis Komaroff", image: "/images/educators/alexis-komaroff.png", categoryContact: true },
+      { name: "Clément Chavaux", image: "/images/educators/clement-chavaux.jpeg" },
+      { name: "Pierre Badens", image: "/images/educators/pierre-badens.jpeg" },
       { name: "Nathan Bonnin" },
       { name: "Christophe Bonnin" },
     ],
@@ -231,7 +231,7 @@ export const partners: { mairies: readonly Partner[]; entreprises: readonly Part
     },
     {
       name: "RO Maintenance",
-      logo: "/images/partners/entreprises/ro-maintenance.png",
+      logo: "/images/partners/entreprises/ro-maintenance.jpg",
       hideMissingLink: true,
     },
     {
@@ -243,10 +243,10 @@ export const partners: { mairies: readonly Partner[]; entreprises: readonly Part
 };
 
 export const leadership = [
-  { familyName: "DESTARAC", givenName: "Romain", displayName: "Romain Destarac", role: "Co-président", image: "/images/leadership/romain-destarac.jpg" },
+  { familyName: "DESTARAC", givenName: "Romain", displayName: "Romain Destarac", role: "Co-président", image: "/images/leadership/romain-destarac.jpeg" },
   { familyName: "SIMON", givenName: "Séverine", displayName: "Séverine Simon", role: "Co-présidente", image: "/images/leadership/severine-simon.jpg" },
-  { familyName: "SORBES-BALLESTEROS", givenName: "Leslie", displayName: "Leslie Sorbes-Ballesteros", role: "Trésorière", image: "/images/leadership/leslie-sorbes-ballesteros.jpg" },
-  { familyName: "CABOT", givenName: "Peggy", displayName: "Peggy Cabot", role: "Secrétaire", image: "/images/leadership/peggy-cabot.jpg" },
+  { familyName: "SORBES-BALLESTEROS", givenName: "Leslie", displayName: "Leslie Sorbes-Ballesteros", role: "Trésorière", image: "/images/leadership/leslie-sorbes-ballesteros.png" },
+  { familyName: "CABOT", givenName: "Peggy", displayName: "Peggy Cabot", role: "Secrétaire", image: "/images/leadership/peggy-cabot.png" },
 ] as const;
 
 export const clubHistory = [
@@ -337,7 +337,7 @@ export const navigation = [
 export const tournament2027 = {
   date: "Samedi 5 juin 2027",
   target: "2027-06-05T00:00:00+02:00",
-  poster: "/images/tournoi/tournoi-2027.jpg",
+  poster: "/images/tournoi/tournoi-2027.jpeg",
   place: "À venir",
   categories: "À venir",
   hours: "À venir",

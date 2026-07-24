@@ -39,7 +39,7 @@ export const homeCarouselSlides: readonly HomeCarouselSlide[] = [
     id: "forums-associations",
     title: "Retrouvez-nous aux forums des associations",
     description: "Venez rencontrer l’équipe de l’EDR Nord Toulousain.",
-    image: "/images/carousel/forums-associations.jpg",
+    image: "/images/carousel/forums-associations.jpeg",
     imageAlt: "Visuel des forums des associations de l’EDR Nord Toulousain",
     href: "/actualites#forums-associations",
     buttonLabel: "Voir l’actualité",
