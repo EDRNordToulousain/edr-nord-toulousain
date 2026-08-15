@@ -62,7 +62,11 @@ function Tournament({ edition = false }: { edition?: boolean }) {
 }
 
 function Events({ slug }: { slug?: string }) {
-  if (!slug) return <><PageHero title="Les événements" text="Des moments pour se retrouver, partager et faire vivre le collectif." /><Container className="grid gap-6 py-16 sm:grid-cols-2 lg:grid-cols-3">{events.map((event) => <Card key={event.slug}><span className="text-4xl">🎉</span><h2 className="mt-4 text-2xl font-black">{event.title}</h2><p className="mt-3 text-slate-500">Informations à venir</p><div className="mt-6"><Button href={`/evenements/${event.slug}`} variant="blue">Découvrir</Button></div></Card>)}</Container></>;
+  if (!slug) return <><PageHero title="Les événements" text="Des moments pour se retrouver, partager et faire vivre le collectif." /><Container className="grid gap-6 py-16 sm:grid-cols-2 lg:grid-cols-3">{events.map((event) => {
+    const isYardSale = event.slug === "vide-grenier" && "venue" in event && "commune" in event;
+
+    return <Card key={event.slug} className={isYardSale ? "border-blue/30 bg-blue/5" : undefined}><span className="text-4xl" aria-hidden="true">{isYardSale ? "🧺" : "🎉"}</span><h2 className="mt-4 text-2xl font-black">{event.title}</h2>{isYardSale ? <div className="mt-4 space-y-2 text-slate-700"><p><strong className="text-night">📅 Date :</strong> {event.date}</p><p><strong className="text-night">📍 Lieu :</strong> {event.venue}</p><p><strong className="text-night">🏘️ Commune :</strong> {event.commune}</p></div> : <p className="mt-3 text-slate-500">Informations à venir</p>}<div className="mt-6"><Button href={`/evenements/${event.slug}`} variant="blue">Découvrir</Button></div></Card>;
+  })}</Container></>;
   const event = events.find((item) => item.slug === slug)!;
   if (event.slug === "vide-grenier" && "venue" in event && "commune" in event) {
     const details = [
