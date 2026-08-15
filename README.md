@@ -123,10 +123,8 @@ Dans `src/data/calendar.ts`, ajouter une entrée dans `seasonEvents.plateaux` ou
 {
   date: "2026-10-03",
   category: "U10",
-  title: "Nom officiel du rendez-vous",
-  commune: "Commune",
-  venue: "Lieu précis",
-  time: "10 h 00",
+  location: "À venir",
+  time: "Horaire confirmé, si disponible",
   details: "Informations pratiques validées",
   directionsUrl: "Lien d’itinéraire vérifié",
 }
@@ -153,9 +151,15 @@ Une diapositive peut ne pas avoir d’image. Dans ce cas, le carrousel affiche u
 
 Dans `src/data/meetings.ts` :
 
-- ajouter les futures réunions dans `meetings` avec la date, l’heure, le lieu, le type de réunion et le public concerné ;
+- ajouter les futures réunions dans `meetings` avec la date au format `AAAA-MM-JJ`, le titre et les informations pratiques confirmées ;
 - déposer les comptes rendus PDF dans `public/documents/reunions/` ;
 - ajouter chaque document dans `meetingMinutes` avec son titre, sa date, sa description et son chemin public.
+
+## Ajouter une photographie d’éducateur
+
+1. Déposer le portrait, avec un nom de fichier sans espace ni accent, dans `public/images/educators/`.
+2. Dans `src/data/site-content.ts`, renseigner son chemin dans la propriété `image` de l’éducateur existant.
+3. Si le cadrage doit être adapté, ajouter une propriété `objectPosition` (par exemple `"50% 35%"`) sans modifier l’image.
 
 ## Ajouter des photographies à la galerie
 

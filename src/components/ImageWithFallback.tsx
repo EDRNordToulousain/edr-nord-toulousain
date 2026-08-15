@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Props = {
   src: string;
@@ -9,11 +9,21 @@ type Props = {
   note?: string;
   className?: string;
   objectFit?: "cover" | "contain";
+  objectPosition?: string;
   background?: "dark" | "light";
 };
 
-export function ImageWithFallback({ src, alt, placeholder, note, className = "", objectFit = "cover", background = "dark" }: Props) {
+export function ImageWithFallback({ src, alt, placeholder, note, className = "", objectFit = "cover", objectPosition = "50% 50%", background = "dark" }: Props) {
   const [failed, setFailed] = useState(false);
+  const imageRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    const checkImage = window.setTimeout(() => {
+      const image = imageRef.current;
+      if (image?.complete && image.naturalWidth === 0) setFailed(true);
+    }, 0);
+    return () => window.clearTimeout(checkImage);
+  }, []);
 
   return (
     <div className={`relative overflow-hidden ${background === "light" ? "bg-white" : "bg-night"} ${className}`}>
@@ -21,8 +31,10 @@ export function ImageWithFallback({ src, alt, placeholder, note, className = "",
         // Une balise img permet d’activer proprement le fallback lorsqu’un futur fichier est absent.
         // eslint-disable-next-line @next/next/no-img-element
         <img
+          ref={imageRef}
           src={src}
           alt={alt}
+          style={{ objectPosition }}
           className={`absolute inset-0 h-full w-full ${objectFit === "contain" ? "object-contain p-3" : "object-cover"}`}
           onError={() => setFailed(true)}
         />

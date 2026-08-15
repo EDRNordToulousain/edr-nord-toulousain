@@ -10,7 +10,8 @@ export function EducatorGrid({ educators }: { educators: readonly Educator[] }) 
             src={educator.image ?? `/images/educators/${educator.name.toLowerCase().replaceAll(" ", "-")}.jpg`}
             alt={educator.image ? `Portrait de ${educator.name}` : ""}
             placeholder="Photo à venir"
-            className="aspect-square"
+            objectPosition={educator.objectPosition}
+            className="aspect-[4/5]"
           />
           <div className="p-5">
             <h3 className="text-lg font-black text-night">{educator.pendingLabel ?? educator.name}</h3>

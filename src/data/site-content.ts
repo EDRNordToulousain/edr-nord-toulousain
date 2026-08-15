@@ -16,6 +16,7 @@ export const site = {
 export type Educator = {
   name: string;
   image?: string;
+  objectPosition?: string;
   categoryContact?: boolean;
   pendingLabel?: string;
 };
@@ -78,7 +79,7 @@ export const categories: readonly Category[] = [
     educators: [
       { name: "Kamélia Belkacem", image: "/images/educators/kamelia-belkacem.jpeg", categoryContact: true },
       { name: "Jean-Luc Ravin" },
-      { name: "Florian Dubois" },
+      { name: "Florian Dubois", image: "/images/educators/florian-dubois.jpeg" },
     ],
     practical: {
       equipment: "Tenue de sport, crampons et protège-dents",
@@ -125,11 +126,11 @@ export const categories: readonly Category[] = [
       address: "Saint-Jory, 31790",
     },
     educators: [
-      { name: "Pierre Peries", categoryContact: true },
+      { name: "Pierre Peries", image: "/images/educators/pierre-peries.jpeg", categoryContact: true },
       { name: "Bruno Cattaï" },
-      { name: "Romain Gomes" },
-      { name: "Mathieu Jeannesson" },
-      { name: "Loic Szcypta" },
+      { name: "Romain Gomes", image: "/images/educators/romain-gomes.jpeg" },
+      { name: "Mathieu Jeannesson", image: "/images/educators/mathieu-jeannesson.jpeg" },
+      { name: "Loic Szcypta", image: "/images/educators/loic-szcypta.jpeg" },
       { name: "Bruno Malandain", image: "/images/educators/bruno-malandain.jpeg" },
     ],
     practical: {
@@ -154,7 +155,7 @@ export const categories: readonly Category[] = [
       { name: "Clément Sorbes-Ballesteros", image: "/images/educators/clement-sorbes-ballesteros.jpg", categoryContact: true },
       { name: "Romain Destarac", image: "/images/leadership/romain-destarac.jpeg" },
       { name: "Badre Saddik", image: "/images/educators/badre-saddik.jpeg" },
-      { name: "Pierre Cabot" },
+      { name: "Pierre Cabot", image: "/images/educators/pierre-cabot.jpeg" },
       { name: "Mathieu Maurieres", image: "/images/educators/mathieu-maurieres.jpeg" },
       { name: "Stephan Delattre", image: "/images/educators/stephan-delattre.jpeg" },
       { name: "Xavier Gratzer", image: "/images/educators/xavier-gratzer.jpeg" },
@@ -181,8 +182,9 @@ export const categories: readonly Category[] = [
       { name: "Alexis Komaroff", image: "/images/educators/alexis-komaroff.png", categoryContact: true },
       { name: "Clément Chavaux", image: "/images/educators/clement-chavaux.jpeg" },
       { name: "Pierre Badens", image: "/images/educators/pierre-badens.jpeg" },
-      { name: "Nathan Bonnin" },
-      { name: "Christophe Bonnin" },
+      { name: "Nathan Bonnin", image: "/images/educators/nathan-bonnin.jpeg" },
+      { name: "Christophe Bonnin", image: "/images/educators/christophe-bonnin.jpeg" },
+      { name: "Cédric Canovai", image: "/images/educators/cedric-canovai.jpeg" },
     ],
     practical: {
       equipment: "Tenue de sport, crampons et protège-dents",
@@ -287,7 +289,13 @@ export const events = [
   { slug: "tombola", title: "Notre tombola" },
   { slug: "noel", title: "Noël de l’EDR", date: "12 décembre" },
   { slug: "calendrier", title: "Vente de calendrier" },
-  { slug: "vide-grenier", title: "Notre vide-grenier" },
+  {
+    slug: "vide-grenier",
+    title: "Notre vide-grenier",
+    date: "8 novembre",
+    venue: "Salle des Deux Mers et boulodrome",
+    commune: "Lespinasse",
+  },
   { slug: "voyage-fin-annee", title: "Notre voyage de fin d’année", categories: "U10 · U12 · U14" },
 ] as const;
 

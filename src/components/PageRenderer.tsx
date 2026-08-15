@@ -44,12 +44,12 @@ function Boutique() {
 function CalendarHub({ type }: { type?: "plateaux" | "tournois" }) {
   if (!type) return <><PageHero title="Le calendrier de l’EDR" text="Retrouvez prochainement les dates des plateaux et des tournois." /><Container className="grid gap-6 py-16 md:grid-cols-2"><Choice title="Plateaux" text="Les rencontres de la saison par catégorie." href="/calendrier/plateaux" /><Choice title="Tournois" text="Les tournois auxquels participe l’école." href="/calendrier/tournois" /></Container></>;
   const title = type === "plateaux" ? "Plateaux" : "Tournois";
-  return <><PageHero title={title} text={`Consultez le calendrier des ${title.toLowerCase()} de l’EDR.`} /><Container className="py-16"><Choice title={`${title} — Saison 2026-2027`} text="Les dates et lieux officiels seront publiés prochainement." href={`/calendrier/${type}/saison-2026-2027`} /></Container></>;
+  return <><PageHero title={title} text={`Consultez le calendrier des ${title.toLowerCase()} de l’EDR.`} /><Container className="py-16"><Choice title={`${title} — Saison 2026-2027`} text={type === "plateaux" ? "Toutes les dates officielles, catégorie par catégorie." : "Les dates et lieux officiels seront publiés prochainement."} href={`/calendrier/${type}/saison-2026-2027`} /></Container></>;
 }
 
 function SeasonCalendar({ type }: { type: "plateaux" | "tournois" }) {
   const title = type === "plateaux" ? "Plateaux" : "Tournois";
-  return <><PageHero title={`${title} — Saison 2026-2027`} text={`Un calendrier mensuel prêt à accueillir les dates officielles des ${title.toLowerCase()}.`} /><Container className="py-16"><MonthlySeasonCalendar type={type} /></Container></>;
+  return <><PageHero title={`${title} — Saison 2026-2027`} text={type === "plateaux" ? "Les dates officielles de la saison, avec un lieu à compléter pour chaque catégorie." : `Un calendrier mensuel prêt à accueillir les dates officielles des ${title.toLowerCase()}.`} /><Container className="py-16"><MonthlySeasonCalendar type={type} /></Container></>;
 }
 
 function Choice({ title, text, href }: { title: string; text: string; href: string }) {
@@ -64,13 +64,19 @@ function Tournament({ edition = false }: { edition?: boolean }) {
 function Events({ slug }: { slug?: string }) {
   if (!slug) return <><PageHero title="Les événements" text="Des moments pour se retrouver, partager et faire vivre le collectif." /><Container className="grid gap-6 py-16 sm:grid-cols-2 lg:grid-cols-3">{events.map((event) => <Card key={event.slug}><span className="text-4xl">🎉</span><h2 className="mt-4 text-2xl font-black">{event.title}</h2><p className="mt-3 text-slate-500">Informations à venir</p><div className="mt-6"><Button href={`/evenements/${event.slug}`} variant="blue">Découvrir</Button></div></Card>)}</Container></>;
   const event = events.find((item) => item.slug === slug)!;
+  if (event.slug === "vide-grenier" && "venue" in event && "commune" in event) {
+    const details = [
+      { label: "Date", value: event.date, icon: "📅" },
+      { label: "Lieu", value: event.venue, icon: "📍" },
+      { label: "Commune", value: event.commune, icon: "🏘️" },
+    ];
+    return <><PageHero title={event.title} text="Un rendez-vous convivial à Lespinasse pour faire vivre l’école de rugby." /><Container className="py-16"><div className="grid gap-5 md:grid-cols-3">{details.map((detail, index) => <Card key={detail.label} className={`relative overflow-hidden border-0 ${index === 1 ? "bg-blue text-white" : index === 2 ? "bg-night text-white" : "bg-red text-white"}`}><span className="absolute -right-4 -top-5 text-7xl opacity-15" aria-hidden="true">{detail.icon}</span><span className="text-3xl" aria-hidden="true">{detail.icon}</span><p className="mt-5 text-sm font-black uppercase tracking-[.18em] text-white/70">{detail.label}</p><p className="mt-2 text-2xl font-black leading-tight">{detail.value}</p></Card>)}</div><p className="mt-8 rounded-2xl border border-blue/20 bg-blue/5 p-5 text-center text-lg font-black text-night">Plus d’informations à venir</p></Container></>;
+  }
   const date = "date" in event ? event.date : "À venir";
   const categoriesLabel = "categories" in event ? event.categories : undefined;
   const futureSections = event.slug === "voyage-fin-annee"
     ? ["Destination", "Dates", "Programme", "Transport", "Hébergement", "Informations pratiques", "Photographies"]
-    : event.slug === "vide-grenier"
-      ? ["Affiche", "Présentation de l’événement", "Inscriptions", "Tarifs", "Partenaires", "Photographies"]
-      : ["Affiche", "Présentation de l’événement", "Partenaires", "Photographies"];
+    : ["Affiche", "Présentation de l’événement", "Partenaires", "Photographies"];
   return <><PageHero title={event.title} text="Toutes les informations concernant cet événement seront communiquées prochainement." /><Container className="py-16"><InfoGrid items={[["Date", date], ["Heure", "À venir"], ["Lieu", "À venir"], ...(categoriesLabel ? [["Catégories concernées", categoriesLabel] as const] : [])]} />{event.slug === "noel" && <p className="mt-5 rounded-2xl bg-red/10 p-5 font-bold text-red">Plus d’informations à venir</p>}<div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">{futureSections.map((item) => <Card key={item}><h2 className="text-xl font-black">{item}</h2><p className="mt-3 text-slate-500">Informations à venir</p></Card>)}</div></Container></>;
 }
 
