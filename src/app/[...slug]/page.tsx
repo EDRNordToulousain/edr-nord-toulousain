@@ -40,12 +40,29 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const path = (await params).slug.join("/");
   const title = titles[path] ?? site.name;
-  const description = path === "tournoi-edr/2027" ? "Tournoi de l’EDR Nord Toulousain le samedi 5 juin 2027 : compte à rebours et informations pratiques." : path === "actualites" ? "Actualités, affiches et dossier d’inscription de l’École de Rugby Nord Toulousain." : `${title} : informations officielles de l’École de Rugby Nord Toulousain.`;
+  const description = path === "tournoi-edr/2027"
+    ? "Tournoi de l’EDR Nord Toulousain le samedi 5 juin 2027 : compte à rebours et informations pratiques."
+    : path === "actualites"
+      ? "Actualités de l’École de Rugby Nord Toulousain : loto du 11 octobre 2026, vide-grenier du 8 novembre 2026 et rendez-vous du club."
+      : path === "evenements/loto"
+        ? "Loto de l’EDR Nord Toulousain le dimanche 11 octobre 2026 à 15h, Salle Xeraco à Bruguières."
+        : path === "evenements/vide-grenier"
+          ? "Vide-grenier de l’EDR Nord Toulousain le dimanche 8 novembre 2026 à Lespinasse : tarifs exposants et réservation HelloAsso."
+          : `${title} : informations officielles de l’École de Rugby Nord Toulousain.`;
   return {
     title,
     description,
     alternates: { canonical: `/${path}` },
-    openGraph: { title: `${title} | EDR Nord Toulousain`, description, url: `/${path}` },
+    openGraph: {
+      title: `${title} | EDR Nord Toulousain`,
+      description,
+      url: `/${path}`,
+      images: path === "evenements/loto"
+        ? ["/images/events/loto-11-octobre-2026.png"]
+        : path === "evenements/vide-grenier"
+          ? ["/images/events/vide-grenier-8-novembre-2026.jpeg"]
+          : undefined,
+    },
   };
 }
 

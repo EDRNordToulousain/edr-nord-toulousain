@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { categories, events, site, tournament2027 } from "@/data/site-content";
+import { categories, events, featuredEvents, site, tournament2027 } from "@/data/site-content";
 import { ImageWithFallback } from "./ImageWithFallback";
 import { Button, Card, Container, InfoGrid, PageHero, SectionTitle } from "./UI";
 import { PresentationDetails } from "./PresentationDetails";
@@ -61,21 +61,111 @@ function Tournament({ edition = false }: { edition?: boolean }) {
   return <><PageHero eyebrow="Rendez-vous officiel" title="Tournoi de l’EDR Nord Toulousain — Édition 2027" text="L’EDR Nord Toulousain prépare son tournoi 2027. Les équipes participantes, le programme, les horaires et les modalités d’inscription seront annoncés prochainement." /><Container className="py-16"><div className="mb-8 rounded-3xl border-2 border-red bg-white p-6 text-center shadow-card"><p className="text-sm font-black uppercase tracking-[.18em] text-red">Date officielle</p><p className="mt-2 text-3xl font-black text-night sm:text-5xl">{tournament2027.date}</p></div><TournamentCountdown target={tournament2027.target} /><a href={tournament2027.poster} target="_blank" rel="noopener noreferrer" className="mt-10 block rounded-3xl focus:outline-none focus-visible:ring-4 focus-visible:ring-blue"><ImageWithFallback src={tournament2027.poster} alt="Affiche du tournoi 2027 de l’EDR Nord Toulousain" placeholder="Affiche officielle à venir" note="Le visuel pourra être ajouté sans modifier la page." objectFit="contain" background="light" className="mx-auto aspect-[3/4] max-h-[56rem] max-w-3xl rounded-3xl shadow-card" /></a><div className="mt-8"><InfoGrid items={[["Lieu", tournament2027.place], ["Catégories concernées", tournament2027.categories], ["Horaires", tournament2027.hours], ["Inscriptions", tournament2027.registration]]} /></div><div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{["Bulletin d’inscription", "Modalités d’inscription", "Catégories concernées", "Programme", "Équipes participantes", "Idées d’hébergement pour les groupes", "Restauration", "Plan d’accès", "Partenaires du tournoi", "Informations pratiques", "Résultats", "Galerie photos"].map((item) => <Card key={item}><h2 className="font-black text-night">{item}</h2><p className="mt-2 text-sm text-slate-500">Informations à venir</p></Card>)}</div></Container></>;
 }
 
+function LotoEvent() {
+  const event = featuredEvents.loto;
+
+  return (
+    <>
+      <PageHero
+        eyebrow="Rendez-vous de l’EDR"
+        title="Loto du 11 octobre 2026"
+        text="Dimanche 11 octobre 2026 à 15h · Salle Xeraco à Bruguières"
+      />
+      <Container className="py-16">
+        <InfoGrid items={[["Date", event.date], ["Heure", event.time], ["Lieu", event.place], ["Commune", event.city]]} />
+        <a
+          href={event.poster}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mx-auto mt-10 block max-w-3xl rounded-3xl focus:outline-none focus-visible:ring-4 focus-visible:ring-blue"
+        >
+          <ImageWithFallback
+            src={event.poster}
+            alt="Affiche officielle du loto de l’EDR Nord Toulousain du 11 octobre 2026"
+            placeholder="Affiche du loto"
+            objectFit="contain"
+            background="light"
+            className="aspect-[1054/1484] w-full rounded-3xl shadow-card"
+          />
+        </a>
+        <Card className="mx-auto mt-10 max-w-3xl text-center">
+          <h2 className="text-2xl font-black text-night">Partenaires</h2>
+          <p className="mt-3 text-slate-500">Partenaires à venir</p>
+        </Card>
+      </Container>
+    </>
+  );
+}
+
+function VideGrenierEvent() {
+  const event = featuredEvents.videGrenier;
+
+  return (
+    <>
+      <PageHero
+        eyebrow="Rendez-vous de l’EDR"
+        title="Vide-grenier du 8 novembre 2026"
+        text="Espace / Salle des Deux Mers et boulodrome — Lespinasse"
+      />
+      <Container className="py-16">
+        <InfoGrid items={[["Date", event.date], ["Lieu", event.place], ["Commune", event.city]]} />
+
+        <div className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(19rem,.72fr)] lg:items-start">
+          <a
+            href={event.poster}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block rounded-3xl focus:outline-none focus-visible:ring-4 focus-visible:ring-blue"
+          >
+            <ImageWithFallback
+              src={event.poster}
+              alt="Affiche officielle du vide-grenier de l’EDR Nord Toulousain du 8 novembre 2026"
+              placeholder="Affiche du vide-grenier"
+              objectFit="contain"
+              background="light"
+              className="aspect-[1138/1402] w-full rounded-3xl shadow-card"
+            />
+          </a>
+
+          <div className="space-y-6">
+            <Card className="border-2 border-red">
+              <p className="text-sm font-black uppercase tracking-[.16em] text-red">Intérieur</p>
+              <p className="mt-3 text-3xl font-black text-night">{event.prices.indoor}</p>
+              <p className="mt-3 font-bold text-slate-600">{event.prices.indoorIncluded}</p>
+            </Card>
+            <Card className="border-2 border-blue">
+              <p className="text-sm font-black uppercase tracking-[.16em] text-blue">Extérieur</p>
+              <p className="mt-3 text-3xl font-black text-night">{event.prices.outdoor}</p>
+            </Card>
+            <Card className="bg-mist text-center">
+              <p className="leading-7 text-slate-700">Réservez directement votre emplacement en ligne via HelloAsso.</p>
+              <a
+                href={event.bookingUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 inline-flex min-h-14 w-full items-center justify-center rounded-full bg-red px-6 py-4 text-center text-lg font-black text-white transition hover:bg-coral focus:outline-none focus-visible:ring-4 focus-visible:ring-blue/40"
+              >
+                Réserver mon emplacement<span className="sr-only"> sur HelloAsso (nouvel onglet)</span>
+              </a>
+              <p className="mt-3 text-sm font-bold text-blue">Lien officiel de réservation HelloAsso</p>
+            </Card>
+          </div>
+        </div>
+      </Container>
+    </>
+  );
+}
+
 function Events({ slug }: { slug?: string }) {
   if (!slug) return <><PageHero title="Les événements" text="Des moments pour se retrouver, partager et faire vivre le collectif." /><Container className="grid gap-6 py-16 sm:grid-cols-2 lg:grid-cols-3">{events.map((event) => {
     const isYardSale = event.slug === "vide-grenier" && "venue" in event && "commune" in event;
+    const isLoto = event.slug === "loto";
 
-    return <Card key={event.slug} className={isYardSale ? "border-blue/30 bg-blue/5" : undefined}><span className="text-4xl" aria-hidden="true">{isYardSale ? "🧺" : "🎉"}</span><h2 className="mt-4 text-2xl font-black">{event.title}</h2>{isYardSale ? <div className="mt-4 space-y-2 text-slate-700"><p><strong className="text-night">📅 Date :</strong> {event.date}</p><p><strong className="text-night">📍 Lieu :</strong> {event.venue}</p><p><strong className="text-night">🏘️ Commune :</strong> {event.commune}</p></div> : <p className="mt-3 text-slate-500">Informations à venir</p>}<div className="mt-6"><Button href={`/evenements/${event.slug}`} variant="blue">Découvrir</Button></div></Card>;
+    return <Card key={event.slug} className={isYardSale || isLoto ? "border-blue/30 bg-blue/5" : undefined}><span className="text-4xl" aria-hidden="true">{isYardSale ? "🧺" : isLoto ? "🎱" : "🎉"}</span><h2 className="mt-4 text-2xl font-black">{event.title}</h2>{isYardSale ? <div className="mt-4 space-y-2 text-slate-700"><p><strong className="text-night">📅 Date :</strong> {event.date}</p><p><strong className="text-night">📍 Lieu :</strong> {event.venue}</p><p><strong className="text-night">🏘️ Commune :</strong> {event.commune}</p></div> : <p className="mt-3 text-slate-500">{isLoto ? "11 octobre 2026 · 15h · Bruguières" : "Informations à venir"}</p>}<div className="mt-6"><Button href={`/evenements/${event.slug}`} variant="blue">Découvrir</Button></div></Card>;
   })}</Container></>;
+  if (slug === "loto") return <LotoEvent />;
+  if (slug === "vide-grenier") return <VideGrenierEvent />;
   const event = events.find((item) => item.slug === slug)!;
-  if (event.slug === "vide-grenier" && "venue" in event && "commune" in event) {
-    const details = [
-      { label: "Date", value: event.date, icon: "📅" },
-      { label: "Lieu", value: event.venue, icon: "📍" },
-      { label: "Commune", value: event.commune, icon: "🏘️" },
-    ];
-    return <><PageHero title={event.title} text="Un rendez-vous convivial à Lespinasse pour faire vivre l’école de rugby." /><Container className="py-16"><div className="grid gap-5 md:grid-cols-3">{details.map((detail) => <Card key={detail.label} className="relative overflow-hidden border-2 border-blue/20"><span className="absolute -right-4 -top-5 text-7xl opacity-10" aria-hidden="true">{detail.icon}</span><span className="text-3xl" aria-hidden="true">{detail.icon}</span><p className="mt-5 text-sm font-black uppercase tracking-[.18em] text-red">{detail.label}</p><p className="mt-2 text-2xl font-black leading-tight text-night">{detail.value}</p></Card>)}</div><p className="mt-8 rounded-2xl border border-blue/20 bg-blue/5 p-5 text-center text-lg font-black text-night">Plus d’informations à venir</p></Container></>;
-  }
   const date = "date" in event ? event.date : "À venir";
   const categoriesLabel = "categories" in event ? event.categories : undefined;
   const futureSections = event.slug === "voyage-fin-annee"

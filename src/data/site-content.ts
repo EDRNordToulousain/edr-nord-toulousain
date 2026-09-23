@@ -285,19 +285,41 @@ export const news = [
 ] as const;
 
 export const events = [
-  { slug: "loto", title: "Nos lotos" },
+  { slug: "loto", title: "Loto du 11 octobre 2026" },
   { slug: "tombola", title: "Notre tombola" },
   { slug: "noel", title: "Noël de l’EDR", date: "12 décembre" },
   { slug: "calendrier", title: "Vente de calendrier" },
   {
     slug: "vide-grenier",
-    title: "Notre vide-grenier",
-    date: "8 novembre",
-    venue: "Salle des Deux Mers et boulodrome",
+    title: "Vide-grenier du 8 novembre 2026",
+    date: "Dimanche 8 novembre 2026",
+    venue: "Espace / Salle des Deux Mers et boulodrome",
     commune: "Lespinasse",
   },
   { slug: "voyage-fin-annee", title: "Notre voyage de fin d’année", categories: "U10 · U12 · U14" },
 ] as const;
+
+export const featuredEvents = {
+  loto: {
+    date: "Dimanche 11 octobre 2026",
+    time: "15h",
+    place: "Salle Xeraco",
+    city: "Bruguières",
+    poster: "/images/events/loto-11-octobre-2026.png",
+  },
+  videGrenier: {
+    date: "Dimanche 8 novembre 2026",
+    place: "Espace / Salle des Deux Mers et boulodrome",
+    city: "Lespinasse",
+    poster: "/images/events/vide-grenier-8-novembre-2026.jpeg",
+    bookingUrl: "https://www.helloasso.com/associations/ecole-de-rugby-nord-toulousain/evenements/vide-grenier-edr-nord-toulousain",
+    prices: {
+      indoor: "15 € pour 3 mètres",
+      indoorIncluded: "Table + chaise incluses",
+      outdoor: "10 € pour 3 mètres",
+    },
+  },
+} as const;
 
 export const navigation = [
   { label: "Accueil", href: "/" },
