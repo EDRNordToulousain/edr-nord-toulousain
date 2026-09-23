@@ -221,9 +221,14 @@ export const partners: { mairies: readonly Partner[]; entreprises: readonly Part
     { name: "Mairie de Villeneuve-lès-Bouloc", logo: "/images/partners/mairies/villeneuve-les-bouloc-logo.jpg", officialUrl: "https://www.villeneuvelesbouloc.fr/", sourceUrl: "https://static.neopse.com/medias/p/2177/site/c7/b4/92/c7b492241c30a058295427e0dca83c7a7fe4165d.jpg" },
   ],
   entreprises: [
+    {
+      name: "RO Maintenance",
+      logo: "/images/partners/entreprises/ro-maintenance.jpg",
+      hideMissingLink: true,
+    },
     { name: "Amipub", officialUrl: "https://amipub.com/", note: "Logo officiel à fournir" },
     { name: "Tutti Pizza Bruguières", logo: "/images/partners/entreprises/tutti-pizza-bruguieres.png", officialUrl: "https://bruguieres.tutti-pizza.com/", sourceUrl: "https://mediab.izipass.cloud/Media/Thumbs/0161/0161547-150.png" },
-    { name: "Super U Bruguières", officialUrl: "https://www.magasins-u.com/magasin/superu-bruguieres", note: "Logo officiel à fournir" },
+    { name: "Super U Bruguières", logo: "/images/partners/entreprises/super-u-bruguieres.png", officialUrl: "https://www.magasins-u.com/magasin/superu-bruguieres" },
     { name: "Les Salaisons de Saint-Sauveur", logo: "/images/partners/entreprises/salaisons-saint-sauveur.png", officialUrl: "https://www.salaisonsdesaintsauveur.fr/", sourceUrl: "https://www.salaisonsdesaintsauveur.fr/wp-content/uploads/2025/08/cropped-Logo-StSauveur-CMJN-2.png" },
     { name: "Crédit Agricole Saint-Jory", logo: "/images/partners/entreprises/credit-agricole.svg", officialUrl: "https://www.credit-agricole.fr/particulier/agence/toulouse-31/saint-jory-4675.html", sourceUrl: "https://www.credit-agricole.fr/content/dam/assetsca/master/public/commun/images/autre/images/NPC-logo_Agir_chaque_jour_CA_H_Desktop-1.svg", note: "Logo national officiel" },
     {
@@ -232,14 +237,9 @@ export const partners: { mairies: readonly Partner[]; entreprises: readonly Part
       officialUrl: "https://www.instagram.com/ldstudio31/",
     },
     {
-      name: "RO Maintenance",
-      logo: "/images/partners/entreprises/ro-maintenance.jpg",
-      hideMissingLink: true,
-    },
-    {
       name: "EM’ASSIST",
       logo: "/images/partners/entreprises/em-assist.png",
-      hideMissingLink: true,
+      officialUrl: "https://www.instagram.com/em.assist.pro/",
     },
   ],
 };
