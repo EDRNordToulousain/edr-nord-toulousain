@@ -22,7 +22,7 @@ const featuredNews = [
     image: featuredEvents.loto.poster,
     alt: "Affiche du loto de l’EDR Nord Toulousain du 11 octobre 2026 à Bruguières",
     href: "/evenements/loto",
-    ratio: "aspect-[1054/1484]",
+    ratio: "aspect-[941/1672]",
   },
 ] as const;
 
@@ -41,8 +41,8 @@ export function NewsPage() {
                 <Image
                   src={item.image}
                   alt={item.alt}
-                  width={item.id === "loto-2026" ? 1054 : 1138}
-                  height={item.id === "loto-2026" ? 1484 : 1402}
+                  width={item.id === "loto-2026" ? 941 : 1138}
+                  height={item.id === "loto-2026" ? 1672 : 1402}
                   sizes="(min-width: 1024px) 50vw, 100vw"
                   className={`${item.ratio} h-auto w-full object-contain`}
                 />

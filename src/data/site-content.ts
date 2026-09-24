@@ -305,7 +305,7 @@ export const featuredEvents = {
     time: "15h",
     place: "Salle Xeraco",
     city: "Bruguières",
-    poster: "/images/events/loto-11-octobre-2026.png",
+    poster: "/images/events/loto-11-octobre-2026-v2.jpeg",
   },
   videGrenier: {
     date: "Dimanche 8 novembre 2026",

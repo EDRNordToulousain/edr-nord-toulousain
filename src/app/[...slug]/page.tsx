@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       url: `/${path}`,
       images: path === "evenements/loto"
-        ? ["/images/events/loto-11-octobre-2026.png"]
+        ? ["/images/events/loto-11-octobre-2026-v2.jpeg"]
         : path === "evenements/vide-grenier"
           ? ["/images/events/vide-grenier-8-novembre-2026.jpeg"]
           : undefined,

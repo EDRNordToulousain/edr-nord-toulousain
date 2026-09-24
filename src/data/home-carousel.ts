@@ -17,7 +17,7 @@ export const homeCarouselSlides: readonly HomeCarouselSlide[] = [
     id: "loto-2026",
     title: "Loto de l’EDR Nord Toulousain",
     description: "Dimanche 11 octobre 2026 à 15h, Salle Xeraco à Bruguières.",
-    image: "/images/events/loto-11-octobre-2026.png",
+    image: "/images/events/loto-11-octobre-2026-v2.jpeg",
     imageAlt: "Affiche du loto de l’EDR Nord Toulousain du 11 octobre 2026 à Bruguières",
     href: "/evenements/loto",
     buttonLabel: "Découvrir le loto",

@@ -85,7 +85,7 @@ function LotoEvent() {
             placeholder="Affiche du loto"
             objectFit="contain"
             background="light"
-            className="aspect-[1054/1484] w-full rounded-3xl shadow-card"
+            className="aspect-[941/1672] w-full rounded-3xl shadow-card"
           />
         </a>
         <Card className="mx-auto mt-10 max-w-3xl text-center">
