@@ -11,6 +11,7 @@ before(async () => {
   await db.exec(await readFile(new URL('../supabase/migrations/202611130001_volunteers.sql',import.meta.url),'utf8'));
   await db.exec(await readFile(new URL('../supabase/migrations/202611130002_missions.sql',import.meta.url),'utf8'));
   await db.exec(await readFile(new URL('../supabase/migrations/202611130003_confirmed_capacities.sql',import.meta.url),'utf8'));
+  await db.exec(await readFile(new URL('../supabase/migrations/202611130004_unlimited_availability.sql',import.meta.url),'utf8'));
   // Dates in fixtures stay relative so the tests remain useful after the events.
   await db.exec("update volunteer_events set event_date=(now() at time zone 'Europe/Paris')::date+1; update volunteer_slots set enabled=true;");
 });

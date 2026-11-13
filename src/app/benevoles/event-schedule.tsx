@@ -1,7 +1,7 @@
 import type { VolunteerEvent } from '@/lib/volunteers/events';
 
 export function EventSchedule({ event }: { event: VolunteerEvent }) {
-  return <dl className="space-y-3 border-y border-slate-100 py-5">
+  return <dl className="space-y-2 border-y border-slate-100 py-3">
     {[
       ['Début des besoins bénévoles', event.setup],
       ['Ouverture des portes', event.doors],

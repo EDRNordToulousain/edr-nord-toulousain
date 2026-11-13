@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { availabilityLabel, missionIsFull } from '@/lib/volunteers/availability';
 import { EventSchedule } from './event-schedule';
 import { useEffect, useState } from 'react';
 import { childCategories, previewSlots, type PublicSlot, type VolunteerEvent } from '@/lib/volunteers/events';
@@ -34,27 +35,28 @@ export function Volunteers({ event: e }: { event: VolunteerEvent }) {
   }
   const input = 'mt-2 w-full rounded-xl border border-slate-300 bg-white p-3 text-ink focus:outline-blue';
   return <>
-    <section className="bg-night px-4 py-16 text-white"><div className="mx-auto max-w-6xl">
+    <section className="bg-night px-4 py-8 sm:py-10 text-white"><div className="mx-auto max-w-6xl">
       <Link href="/benevoles" className="inline-block rounded-lg py-2 font-semibold text-white/85 underline underline-offset-4">← Tous les événements</Link>
-      <h1 className="mt-4 text-4xl font-black sm:text-5xl">{e.title}</h1>
-      <p className="mt-5 text-lg text-white/85">{e.label} · {e.venue}</p>
+      <h1 className="mt-2 text-3xl font-black sm:text-4xl">{e.title}</h1>
+      <p className="mt-3 text-lg text-white/85">{e.label} · {e.venue}</p>
     </div></section>
-    <div className="mx-auto max-w-4xl px-4 py-10">
-      <div className="mb-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-card"><EventSchedule event={e} /></div>
+    <div className="mx-auto max-w-4xl px-4 py-6">
+      <div className="mb-5 rounded-2xl border border-slate-200 bg-white p-4 shadow-card"><EventSchedule event={e} /></div>
       <form onSubmit={submit} id="inscription">
         <fieldset>
           <legend className="text-2xl font-black text-night">Choisissez vos missions</legend>
           <p className="mt-3 text-slate-600">Cochez une ou plusieurs missions pour cet événement, puis validez votre inscription une seule fois.</p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          {slots.slice().sort((a,b) => e.missions.findIndex(m => a.id === `${a.event_id}-${m.id}`) - e.missions.findIndex(m => b.id === `${b.event_id}-${m.id}`)).map(s => <label key={s.id} className="mt-3 flex cursor-pointer gap-3 rounded-xl bg-mist p-4">
-            <input type="checkbox" className="mt-1 h-5 w-5 accent-blue" disabled={busy || (s.capacity !== null && s.registered >= s.capacity)} checked={selected.includes(s.id)} onChange={ev => setSelected(current => ev.target.checked ? [...current,s.id] : current.filter(id => id !== s.id))} />
-            <span><span className="block font-bold text-night">{s.title}</span><span className="text-sm text-slate-600">{s.capacity === null ? `${countsLive ? `${s.registered} inscrits · ` : ''}Sans limite de bénévoles` : `${countsLive ? '' : 'À l’ouverture : '}${s.registered} / ${s.capacity} places prises · ${Math.max(0,s.capacity-s.registered)} places restantes${!countsLive && s.registered > 0 ? ' (réservation existante)' : ''}`}</span></span>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {slots.slice().sort((a,b) => e.missions.findIndex(m => a.id === `${a.event_id}-${m.id}`) - e.missions.findIndex(m => b.id === `${b.event_id}-${m.id}`)).map(s => <label key={s.id} data-mission-id={s.id} className="flex min-w-0 cursor-pointer items-start gap-2 rounded-xl border border-slate-200 bg-white p-3 transition hover:border-blue/50 focus-within:ring-2 focus-within:ring-blue">
+            <input type="checkbox" className="mt-1 h-5 w-5 shrink-0 accent-blue" disabled={busy || (countsLive && s.enabled !== true) || missionIsFull(s)} checked={selected.includes(s.id)} onChange={ev => setSelected(current => ev.target.checked ? [...current,s.id] : current.filter(id => id !== s.id))} />
+            <span aria-hidden="true" className="shrink-0 text-xl">{e.missions.find(m => s.id === `${e.id}-${m.id}`)?.icon ?? '🤝'}</span>
+            <span className="min-w-0"><span className="block text-lg font-bold leading-snug text-night">{s.title}</span><span className="mt-1 block text-base leading-snug text-slate-600">{availabilityLabel(s, countsLive)}</span></span>
           </label>)}
           {!slots.some(s => s.event_id === e.id) && <p className="text-sm text-slate-600">Les missions seront disponibles à l’ouverture des inscriptions.</p>}
           {e.id === 'lespinasse-2026' && !slots.some(s => s.id === 'lespinasse-2026-encaissement') && <p className="mt-3 rounded-xl bg-mist p-4 text-sm"><strong>Encaissement :</strong> 1 place réservée, 3 places à prendre à l’ouverture.</p>}
           </div>
         </fieldset>
-        <div className="mt-10 rounded-3xl bg-mist p-6 sm:p-8"><h2 className="text-2xl font-black text-night">Votre inscription</h2>
+        <div className="mt-6 rounded-2xl bg-mist p-4 sm:p-5"><h2 className="text-2xl font-black text-night">Votre inscription</h2>
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
             <label className="font-bold">Nom<input className={input} name="lastName" autoComplete="family-name" maxLength={80} required /></label>
             <label className="font-bold">Prénom<input className={input} name="firstName" autoComplete="given-name" maxLength={80} required /></label>

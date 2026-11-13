@@ -1,4 +1,4 @@
-export type VolunteerMission = { id: string; title: string; capacity: number | null };
+export type VolunteerMission = { id: string; title: string; capacity: number | null; icon?: string };
 export type VolunteerEvent = {
   id: string; title: string; town: string; date: string; label: string; venue: string;
   setup: string; doors: string; start: string; startLabel: string;
@@ -7,15 +7,15 @@ export type VolunteerEvent = {
 
 // Confirmed unlimited missions use null; finite missions always have a positive capacity.
 export const volunteerMissions = [
-  { id: 'installation', title: 'Installation des tables, chaises et de la buvette', capacity: null },
-  { id: 'encaissement', title: 'Encaissement', capacity: 4 },
-  { id: 'buvette', title: 'Tenue de la buvette', capacity: 3 },
-  { id: 'controle-cartons', title: 'Contrôle des cartons', capacity: 2 },
-  { id: 'annonce-numeros', title: 'Annonce des numéros', capacity: 1 },
-  { id: 'distribution-numeros', title: 'Distribution des numéros', capacity: 1 },
-  { id: 'rangement-tables', title: 'Rangement des tables et chaises', capacity: null },
-  { id: 'balayage', title: 'Balayage', capacity: null },
-  { id: 'rangement-buvette', title: 'Rangement de la buvette', capacity: null },
+  { id: 'installation', icon: '🛠️', title: 'Installation des tables, chaises et de la buvette', capacity: null },
+  { id: 'encaissement', icon: '💶', title: 'Encaissement', capacity: 4 },
+  { id: 'buvette', icon: '🥤', title: 'Tenue de la buvette', capacity: 3 },
+  { id: 'controle-cartons', icon: '🔎', title: 'Contrôle des cartons', capacity: 2 },
+  { id: 'annonce-numeros', icon: '🎤', title: 'Annonce des numéros', capacity: 1 },
+  { id: 'distribution-numeros', icon: '🎱', title: 'Distribution des numéros', capacity: 1 },
+  { id: 'rangement-tables', icon: '🪑', title: 'Rangement des tables et chaises', capacity: null },
+  { id: 'balayage', icon: '🧹', title: 'Balayage', capacity: null },
+  { id: 'rangement-buvette', icon: '📦', title: 'Rangement de la buvette', capacity: null },
 ] as const;
 
 // A new catalogue entry creates its card and route; storage uses a matching migration.
@@ -26,7 +26,7 @@ export const volunteerEvents = [
 ] as const satisfies readonly VolunteerEvent[];
 
 export const childCategories = ['Baby', 'U6', 'U8', 'U10', 'U12', 'U14'] as const;
-export type PublicSlot = { id: string; event_id: string; title: string; capacity: number | null; registered: number };
+export type PublicSlot = { id: string; event_id: string; title: string; capacity: number | null; registered: number; enabled?: boolean };
 export const previewSlots: PublicSlot[] = volunteerEvents.flatMap(event => event.missions.map(mission => ({
   id: `${event.id}-${mission.id}`, event_id: event.id, title: mission.title, capacity: mission.capacity,
   registered: event.id === 'lespinasse-2026' && mission.id === 'encaissement' ? 1 : 0,

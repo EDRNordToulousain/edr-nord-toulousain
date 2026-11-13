@@ -23,7 +23,7 @@ test('confirmation, fixed admin recipient, reminder and failed delivery stay ser
     assert.deepEqual(bodies[1].to,['communication.edrnordtoulousain@gmail.com']);
     assert.ok(bodies[1].text.includes('Alice Private'));assert.ok(bodies[1].text.includes('U10'));
     assert.ok(bodies[2].subject.includes('demain'));assert.ok(bodies[2].text.includes('Encaissement, Installation'));
-    assert.ok(bodies[0].text.includes('18 h'));assert.ok(bodies[0].text.includes('19 h 30'));assert.ok(bodies[0].text.includes('21 h'));
+    assert.ok(bodies[0].text.includes('17 h 30'));assert.ok(bodies[0].text.includes('19 h 30'));assert.ok(bodies[0].text.includes('21 h'));
     assert.equal(state.requests[0].options.headers['Idempotency-Key'],'volunteer-job-0');
     assert.equal(state.calls.filter(c=>c.name==='volunteer_finish_mail').at(-1).args.p_success,false);
   } finally {globalThis.fetch=originalFetch;delete globalThis.__volunteerMailTest;}

@@ -14,12 +14,14 @@ try {
  await db.exec(readFileSync(path.join(project,'supabase/migrations/202611130001_volunteers.sql'),'utf8'));
  await db.exec(readFileSync(path.join(project,'supabase/migrations/202611130002_missions.sql'),'utf8'));
  await db.exec(readFileSync(path.join(project,'supabase/migrations/202611130003_confirmed_capacities.sql'),'utf8'));
- await db.exec("update volunteer_events set event_date=(now() at time zone 'Europe/Paris')::date+1; update volunteer_slots set enabled=true;");
+ await db.exec(readFileSync(path.join(project,'supabase/migrations/202611130004_unlimited_availability.sql'),'utf8'));
+ await db.exec("update volunteer_events set event_date=(now() at time zone 'Europe/Paris')::date+1; update volunteer_slots set enabled=true where capacity is not null; update volunteer_slots set enabled=false where id='bruguieres-2027-buvette';");
  server=createServer(async(req,res)=>{try{
   assert.equal(req.headers.authorization,'Bearer local-test-only');
   let body='';for await(const chunk of req) body+=chunk;
-  const args=JSON.parse(body);let data;
+  const args=body?JSON.parse(body):{};let data;
   if(req.url==='/rest/v1/rpc/volunteer_counts') data=(await db.query('select * from volunteer_counts()')).rows;
+  else if(req.url==='/rest/v1/volunteer_slots?select=id,enabled') data=(await db.query('select id,enabled from volunteer_slots')).rows;
   else if(req.url==='/rest/v1/rpc/volunteer_register') data=(await db.query('select volunteer_register($1,$2,$3,$4,$5,$6) ok',[args.p_first,args.p_last,args.p_email,args.p_category,args.p_slots,args.p_bucket])).rows[0].ok;
   else throw Error('Unexpected RPC');
   res.writeHead(200,{'Content-Type':'application/json'});res.end(JSON.stringify(data));
@@ -71,6 +73,10 @@ try {
  assert.deepEqual(await page.locator('fieldset label > span > span:first-child').allTextContents(),[
  'Installation des tables, chaises et de la buvette','Encaissement','Tenue de la buvette','Contrôle des cartons','Annonce des numéros','Distribution des numéros','Rangement des tables et chaises','Balayage','Rangement de la buvette']);
  await page.getByText('1 / 4 places prises').waitFor();
+ assert.ok(await page.getByText('1 place restante',{exact:false}).first().isVisible());
+ assert.equal(await page.getByText('1 places restantes',{exact:false}).count(),0);
+ assert.ok(await page.getByText('17 h 30',{exact:true}).isVisible());
+ assert.equal(await page.locator('fieldset label > span > span:first-child').first().evaluate(node=>getComputedStyle(node).fontSize),'18px');
  assert.equal(await page.getByText('0 inscrits · Sans limite de bénévoles',{exact:true}).count(),4);
  assert.ok(await page.getByLabel('Rangement de la buvette').isEnabled());
  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
@@ -78,9 +84,14 @@ try {
   await page.getByLabel('Nom',{exact:true}).fill('Test-Privé');await page.getByLabel('Prénom',{exact:true}).fill('Alice');
   await page.getByLabel('E-mail',{exact:true}).fill('alice-private@example.test');await page.getByLabel('Catégorie de l’enfant').selectOption('U10');await page.getByLabel('J’accepte').check();
  };
- await page.getByLabel('Encaissement').check();await page.getByLabel(/^Installation/).check();
+ await page.getByLabel('Rangement des tables et chaises').check();await page.getByRole('checkbox',{name:/Installation des tables/}).check();
+ const requestPromise=page.waitForRequest(request=>request.method()==='POST' && request.url().endsWith('/api/benevoles/inscriptions'));
  await fill();
+ const responsePromise=page.waitForResponse(response=>response.request().method()==='POST' && response.url().endsWith('/api/benevoles/inscriptions'));
  await page.getByRole('button',{name:'Confirmer mon inscription'}).click();
+ assert.equal((await responsePromise).status(),201);
+ const payload=(await requestPromise).postDataJSON();
+ assert.deepEqual(payload.slots.sort(),['lespinasse-2026-installation','lespinasse-2026-rangement-tables']);
  await page.getByRole('status').filter({hasText:'Inscription enregistrée'}).waitFor();
  assert.equal(await page.getByLabel('E-mail',{exact:true}).inputValue(),'');
  assert.equal((await db.query('select count(*)::int n from volunteer_assignments')).rows[0].n,2);
@@ -90,13 +101,15 @@ try {
  await page.getByRole('link',{name:'Voir les autres événements'}).click();await page.waitForURL(url=>url.pathname==='/benevoles');
  await page.getByRole('link',{name:'Voir les missions — Loto de Bruguières',exact:true}).click();await page.waitForURL('**/benevoles/bruguieres-2027');
  assert.equal(await page.getByLabel('E-mail',{exact:true}).inputValue(),'');assert.equal(await page.locator('fieldset input:checked').count(),0);
+ await page.getByText('Inscriptions fermées pour cette mission',{exact:true}).waitFor();
+ assert.ok(await page.getByLabel('Tenue de la buvette').isDisabled());
  await page.getByLabel('Contrôle des cartons').check();await fill();
  await page.getByRole('button',{name:'Confirmer mon inscription'}).click();await page.getByRole('status').filter({hasText:'Inscription enregistrée'}).waitFor();
  const assignments=(await db.query('select slot_id from volunteer_assignments order by slot_id')).rows.map(r=>r.slot_id);
- assert.deepEqual(assignments,['bruguieres-2027-controle-cartons','lespinasse-2026-encaissement','lespinasse-2026-installation']);
+ assert.deepEqual(assignments,['bruguieres-2027-controle-cartons','lespinasse-2026-installation','lespinasse-2026-rangement-tables']);
  assert.equal((await db.query('select count(*)::int n from volunteer_mail')).rows[0].n,4);
  const dataResponse=await fetch(origin+'/api/benevoles');const data=await dataResponse.text();assert.equal(dataResponse.headers.get('cache-control'),'no-store');assert.ok(!data.includes('alice-private'));assert.ok(!data.includes('Test-Privé'));
- const publicPage=await context.newPage();await publicPage.goto(origin+'/benevoles/lespinasse-2026',{waitUntil:'networkidle'});assert.ok(await publicPage.getByText('2 / 4 places prises').isVisible());assert.ok(!(await publicPage.content()).includes('alice-private'));
+ const publicPage=await context.newPage();await publicPage.goto(origin+'/benevoles/lespinasse-2026',{waitUntil:'networkidle'});assert.ok(await publicPage.getByText('1 / 4 places prises').isVisible());assert.ok(!(await publicPage.content()).includes('alice-private'));
  // Direct links, unique metadata and a clear 404 for unknown events.
  for(const id of ['lespinasse-2026','bruguieres-2027','saint-jory-2027']) {
   const r=await fetch(`${origin}/benevoles/${id}`);assert.equal(r.status,200);
@@ -114,6 +127,9 @@ try {
  assert.equal(await page.locator('article').count(),3);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
  await page.screenshot({path:'/tmp/edr-benevoles-accueil.png',fullPage:true});
  await page.goto(origin+'/benevoles/lespinasse-2026',{waitUntil:'networkidle'});
+ const tableRow=await page.locator('[data-mission-id="lespinasse-2026-rangement-tables"]').boundingBox();
+ const sweepRow=await page.locator('[data-mission-id="lespinasse-2026-balayage"]').boundingBox();
+ assert.ok(Math.abs(tableRow.y-sweepRow.y)<1,'Rangement and Balayage must share a row on wide screens');
  await page.screenshot({path:'/tmp/edr-benevoles-evenement.png',fullPage:true});
  await page.evaluate(async()=>{await navigator.serviceWorker.ready;});await page.reload({waitUntil:'networkidle'});
  assert.ok(await page.evaluate(()=>!!navigator.serviceWorker.controller));

@@ -7,7 +7,7 @@ test('three matching mission lists preserve finite and unlimited capacities and 
  const db=new PGlite();
  try {
   await db.exec('create role anon; create role authenticated; create role service_role bypassrls;');
-  for(const name of ['202611130001_volunteers.sql','202611130002_missions.sql','202611130003_confirmed_capacities.sql']) await db.exec(await readFile(new URL('../supabase/migrations/'+name,import.meta.url),'utf8'));
+  for(const name of ['202611130001_volunteers.sql','202611130002_missions.sql','202611130003_confirmed_capacities.sql','202611130004_unlimited_availability.sql']) await db.exec(await readFile(new URL('../supabase/migrations/'+name,import.meta.url),'utf8'));
   const code=ts.transpileModule(await readFile(new URL('../src/lib/volunteers/events.ts',import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText;
   const {previewSlots,volunteerEvents}=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
   const rows=(await db.query('select * from volunteer_counts()')).rows;
