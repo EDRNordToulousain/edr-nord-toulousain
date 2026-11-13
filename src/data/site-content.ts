@@ -322,6 +322,7 @@ export const featuredEvents = {
 } as const;
 
 export const navigation = [
+  { label: "Bénévoles", href: "/benevoles" },
   { label: "Accueil", href: "/" },
   { label: "Présentation", href: "/presentation" },
   {
