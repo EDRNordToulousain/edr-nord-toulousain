@@ -8,21 +8,21 @@ Aucun binding ni variable Supabase, Resend ou cron n'était configuré dans la m
 
 Le README documente le déploiement Vercel automatique depuis `main`. Un push sur cette branche ne prouve ni le succès du déploiement, ni l'activation du domaine, des e-mails ou du cron. Vérifier les résultats dans Vercel avant de déclarer la page publiée. Aucun e-mail réel n'est envoyé pour les tests.
 
-## Capacités confirmées et restantes
+## Capacités confirmées
 
 | Mission commune aux trois événements | Capacité |
 | --- | --- |
-| Installation des tables, chaises et de la buvette | À confirmer |
+| Installation des tables, chaises et de la buvette | Sans limite |
 | Encaissement | 4 |
-| Tenue de la buvette | À confirmer |
+| Tenue de la buvette | 3 |
 | Contrôle des cartons | 2 |
 | Annonce des numéros | 1 |
 | Distribution des numéros | 1 |
-| Rangement des tables et chaises | À confirmer |
-| Balayage | À confirmer |
-| Rangement de la buvette | À confirmer |
+| Rangement des tables et chaises | Sans limite |
+| Balayage | Sans limite |
+| Rangement de la buvette | Sans limite |
 
-Une place d'encaissement est réservée à Lespinasse, conformément à la demande initiale : 3 places restantes sur 4. Aucune réservation supplémentaire n'est inventée pour les deux autres événements. Les valeurs Installation=8/10 dans les anciens tests sont des fixtures, pas des capacités validées. Les cinq effectifs manquants sont `null` en base, affichés « Effectif à confirmer » et non sélectionnables ; ce n'est pas une capacité illimitée. L'administration doit fournir ces valeurs avant ouverture complète.
+Une place d'encaissement est réservée à Lespinasse, conformément à la demande initiale : 3 places restantes sur 4. Aucune réservation supplémentaire n'est inventée pour les deux autres événements. La migration des capacités ne modifie aucune réservation ni inscription. Les missions d’installation, de rangement et de balayage sont sans plafond (`capacity=null`) ; elles restent sélectionnables et ne deviennent jamais complètes. Les missions limitées affichent les places prises et restantes quand les compteurs sont en direct.
 
 Sans services configurés, la page affiche la répartition prévue et la réservation connue, sans présenter ces nombres comme des compteurs en direct. Si une base déjà configurée devient indisponible, le formulaire reste fermé. Avec la base configurée, seuls les compteurs agrégés sont lus et les missions restent visibles même lorsqu'elles ne sont pas ouvertes.
 
@@ -32,12 +32,13 @@ Créer ou réutiliser un projet, de préférence en région UE, et appliquer **d
 
 1. `supabase/migrations/202611130001_volunteers.sql`
 2. `supabase/migrations/202611130002_missions.sql`
+3. `supabase/migrations/202611130003_confirmed_capacities.sql`
 
-Si la première migration a déjà été appliquée, ne pas la réexécuter ; appliquer seulement la seconde. La seconde migration préserve les capacités et réservations qui auraient déjà été ajustées par l'administration.
+Ne pas réexécuter les migrations déjà appliquées. Si les deux premières sont installées, appliquer seulement la troisième. La troisième fixe les effectifs confirmés et retire l’interdiction temporaire des capacités illimitées, sans toucher aux réservations, personnes, affectations, statuts d’ouverture ou e-mails existants.
 
 Les tables ont RLS activé, sans politique publique. Les rôles `anon` et `authenticated` ne peuvent ni consulter les tables ni invoquer les fonctions serveur. La clé serveur `service_role` reste exclusivement côté serveur. L'administration utilise le tableau de bord Supabase via des comptes habilités avec MFA ; aucune API publique ne donne les coordonnées. Les accès doivent être limités aux responsables de l'EDR.
 
-Avant ouverture, renseigner les capacités manquantes via une migration examinée ou le tableau de bord, puis activer les missions confirmées (`enabled=true`). La contrainte SQL interdit d'activer une mission sans capacité. Une réservation transactionnelle contrôle toutes les missions sélectionnées avant d'enregistrer quoi que ce soit. Les doublons e-mail/mission sont refusés et les verrous des missions sont pris dans un ordre stable.
+Avant ouverture, activer les missions confirmées (`enabled=true`). Une capacité `null` signifie désormais explicitement « sans limite », et non « à confirmer ». Le verrou global d’inscription reste désactivé jusqu’à configuration et validation des services. Une réservation transactionnelle contrôle toutes les missions sélectionnées avant d'enregistrer quoi que ce soit. Les doublons e-mail/mission sont refusés et les verrous des missions sont pris dans un ordre stable.
 
 ## Variables : où saisir les valeurs
 
@@ -45,7 +46,7 @@ Dans Vercel : **Project → Settings → Environment Variables**, séparément p
 
 | Variable serveur | Usage |
 | --- | --- |
-| `VOLUNTEERS_REGISTRATION_ENABLED` | `false` par défaut ; `true` uniquement après validation de la page, des effectifs et des services |
+| `VOLUNTEERS_REGISTRATION_ENABLED` | `false` par défaut ; `true` uniquement après validation de la page et des services |
 | `SUPABASE_URL` | URL HTTPS exacte du projet Supabase |
 | `SUPABASE_SERVICE_ROLE_KEY` | Clé serveur `service_role`, jamais la clé publique du navigateur |
 | `RESEND_API_KEY` | Clé d'envoi du projet Resend |
@@ -90,6 +91,6 @@ L'EDR doit définir la durée de conservation adaptée et supprimer les données
 
 Commandes : `pnpm lint`, `pnpm test:volunteers`, `pnpm build`, `pnpm test:volunteers:browser`. Pour le navigateur : Chromium à `/usr/bin/chromium` ou `CHROMIUM_PATH`, ports 3400/3401 libres, compilation préalable nécessaire.
 
-Sept tests automatisés passent : catalogue des 27 missions et effectifs non inventés, confidentialité SQL/RLS, réservation transactionnelle et limites, validation des champs, verrou d'ouverture, e-mails/destinataires/Reply-To simulés, rappels uniques et baux/reprises. Le test Chromium utilise une base PostgreSQL embarquée et un adaptateur REST locaux ; il vérifie trois missions sur deux événements, quatre messages en file, le compteur dans un second navigateur, l'ouverture explicite uniquement dans la fixture locale, l'isolation PWA et le repli hors connexion sans cache nominatif.
+Sept tests automatisés passent : catalogue des 27 missions, plafonds confirmés, inscriptions sans limite et réservation préservée, confidentialité SQL/RLS, réservation transactionnelle et limites, validation des champs, verrou d'ouverture, e-mails/destinataires/Reply-To simulés, rappels uniques et baux/reprises. Le test Chromium utilise une base PostgreSQL embarquée et un adaptateur REST locaux ; il vérifie trois missions sur deux événements, quatre messages en file, le compteur dans un second navigateur, l'ouverture explicite uniquement dans la fixture locale, l'isolation PWA et le repli hors connexion sans cache nominatif.
 
-Compilation Next.js/TypeScript et ESLint passent (40 pages générées). Le rendu sans services expose bien les 27 missions, les 15 capacités à confirmer et les lieux exacts, avec inscriptions fermées et icônes accessibles. Les tests n'établissent ni la concurrence interconnexions d'un projet Supabase distant (PGlite sérialise), ni la vérification DNS Resend, ni la livraison réelle, ni la planification Vercel, ni le succès d'un déploiement distant. Ces points restent à vérifier dans les services configurés.
+Compilation Next.js/TypeScript et ESLint passent (40 pages générées). Le rendu sans services expose bien les 27 missions, les 12 missions sans plafond et les capacités limitées confirmées et les lieux exacts, avec inscriptions fermées et icônes accessibles. Les tests n'établissent ni la concurrence interconnexions d'un projet Supabase distant (PGlite sérialise), ni la vérification DNS Resend, ni la livraison réelle, ni la planification Vercel, ni le succès d'un déploiement distant. Ces points restent à vérifier dans les services configurés.

@@ -3,11 +3,11 @@ export const volunteerEvents = [
   { id: 'bruguieres-2027', town: 'Bruguières', date: '2027-01-24', label: 'dimanche 24 janvier 2027', venue: 'Salle Xeraco', setup: '11 h', doors: '13 h', loto: '15 h' },
   { id: 'saint-jory-2027', town: 'Saint-Jory', date: '2027-03-20', label: 'samedi 20 mars 2027', venue: 'Foyer rural', setup: '18 h', doors: '19 h 30', loto: '21 h' },
 ] as const;
-// null means not yet confirmed; it never means unlimited places.
+// Confirmed unlimited missions use null; finite missions always have a positive capacity.
 export const volunteerMissions = [
   { id: 'installation', title: 'Installation des tables, chaises et de la buvette', capacity: null },
   { id: 'encaissement', title: 'Encaissement', capacity: 4 },
-  { id: 'buvette', title: 'Tenue de la buvette', capacity: null },
+  { id: 'buvette', title: 'Tenue de la buvette', capacity: 3 },
   { id: 'controle-cartons', title: 'Contrôle des cartons', capacity: 2 },
   { id: 'annonce-numeros', title: 'Annonce des numéros', capacity: 1 },
   { id: 'distribution-numeros', title: 'Distribution des numéros', capacity: 1 },

@@ -10,8 +10,9 @@ before(async () => {
   await db.exec('create role anon; create role authenticated; create role service_role bypassrls;');
   await db.exec(await readFile(new URL('../supabase/migrations/202611130001_volunteers.sql',import.meta.url),'utf8'));
   await db.exec(await readFile(new URL('../supabase/migrations/202611130002_missions.sql',import.meta.url),'utf8'));
+  await db.exec(await readFile(new URL('../supabase/migrations/202611130003_confirmed_capacities.sql',import.meta.url),'utf8'));
   // Dates in fixtures stay relative so the tests remain useful after the events.
-  await db.exec("update volunteer_events set event_date=(now() at time zone 'Europe/Paris')::date+1; update volunteer_slots set enabled=true where capacity is not null; insert into volunteer_slots values('lespinasse-2026-installation','lespinasse-2026','Installation',10,0,true) on conflict(id) do update set capacity=10,enabled=true;");
+  await db.exec("update volunteer_events set event_date=(now() at time zone 'Europe/Paris')::date+1; update volunteer_slots set enabled=true;");
 });
 after(async () => { await db.close(); });
 test('reservation, multiple missions, atomic refusal, duplicates and private data', async () => {

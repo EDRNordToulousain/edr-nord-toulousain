@@ -13,7 +13,8 @@ try {
  await db.exec('create role anon; create role authenticated; create role service_role bypassrls;');
  await db.exec(readFileSync(path.join(project,'supabase/migrations/202611130001_volunteers.sql'),'utf8'));
  await db.exec(readFileSync(path.join(project,'supabase/migrations/202611130002_missions.sql'),'utf8'));
- await db.exec("update volunteer_events set event_date=(now() at time zone 'Europe/Paris')::date+1; update volunteer_slots set enabled=true where capacity is not null; insert into volunteer_slots values('lespinasse-2026-installation','lespinasse-2026','Installation',8,0,true) on conflict(id) do update set capacity=8,enabled=true;");
+ await db.exec(readFileSync(path.join(project,'supabase/migrations/202611130003_confirmed_capacities.sql'),'utf8'));
+ await db.exec("update volunteer_events set event_date=(now() at time zone 'Europe/Paris')::date+1; update volunteer_slots set enabled=true;");
  server=createServer(async(req,res)=>{try{
   assert.equal(req.headers.authorization,'Bearer local-test-only');
   let body='';for await(const chunk of req) body+=chunk;
@@ -49,7 +50,9 @@ try {
  assert.equal(await page.locator('fieldset').count(),3);
  for (const field of await page.locator('fieldset').all()) assert.deepEqual(await field.locator('label > span > span:first-child').allTextContents(),[
  'Installation des tables, chaises et de la buvette','Encaissement','Tenue de la buvette','Contrôle des cartons','Annonce des numéros','Distribution des numéros','Rangement des tables et chaises','Balayage','Rangement de la buvette']);
- assert.ok(await page.getByText('1 / 4 inscrits').isVisible());
+ assert.ok(await page.getByText('1 / 4 places prises').isVisible());
+ assert.equal(await page.getByText('0 inscrits · Sans limite de bénévoles',{exact:true}).count(),12);
+ for(const field of await page.locator('fieldset').all()) assert.ok(await field.getByLabel('Rangement de la buvette').isEnabled());
  await page.getByLabel('Encaissement').first().check();await page.getByLabel(/^Installation/).first().check();await page.locator('fieldset').nth(1).getByLabel('Contrôle des cartons').check();
  await page.getByLabel('Nom',{exact:true}).fill('Test-Privé');await page.getByLabel('Prénom',{exact:true}).fill('Alice');
  await page.getByLabel('E-mail',{exact:true}).fill('alice-private@example.test');await page.getByLabel('Catégorie de l’enfant').selectOption('U10');await page.getByLabel('J’accepte').check();
@@ -59,7 +62,7 @@ try {
  const dataResponse=await fetch(origin+'/api/benevoles');const data=await dataResponse.text();assert.equal(dataResponse.headers.get('cache-control'),'no-store');assert.ok(!data.includes('alice-private'));assert.ok(!data.includes('Test-Privé'));
  assert.equal((await db.query('select count(*)::int n from volunteer_assignments')).rows[0].n,3);
  assert.equal((await db.query('select count(*)::int n from volunteer_mail')).rows[0].n,4);
- const publicPage=await context.newPage();await publicPage.goto(origin+'/benevoles',{waitUntil:'networkidle'});assert.ok(await publicPage.getByText('2 / 4 inscrits').isVisible());assert.ok(!(await publicPage.content()).includes('alice-private'));
+ const publicPage=await context.newPage();await publicPage.goto(origin+'/benevoles',{waitUntil:'networkidle'});assert.ok(await publicPage.getByText('2 / 4 places prises').isVisible());assert.ok(!(await publicPage.content()).includes('alice-private'));
  await page.evaluate(async()=>{await navigator.serviceWorker.ready;});await page.reload({waitUntil:'networkidle'});
  assert.ok(await page.evaluate(()=>!!navigator.serviceWorker.controller));
  assert.deepEqual(await page.evaluate(async()=>await caches.keys()),[]);
