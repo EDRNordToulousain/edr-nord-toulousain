@@ -35,7 +35,7 @@ try {
  assert.equal((await fetch(origin+'/api/benevoles/cron',{headers:{Authorization:'Bearer local-test-only'}})).status,503);
  assert.equal((await db.query('select count(*)::int n from volunteer_people')).rows[0].n,0);
  browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH || '/usr/bin/chromium',args:['--no-sandbox'],headless:true});
- const review=await browser.newPage();await review.goto(origin+'/benevoles',{waitUntil:'networkidle'});await review.getByLabel('Encaissement').first().check();
+ const review=await browser.newPage();await review.goto(origin+'/benevoles/lespinasse-2026',{waitUntil:'networkidle'});await review.getByLabel('Encaissement').first().check();
  assert.ok(await review.getByRole('button',{name:'Confirmer mon inscription'}).isDisabled());await review.close();
  // Explicit opening is tested only against this disposable local fixture.
  await new Promise(resolve=>{app.once('exit',resolve);app.kill('SIGTERM');});
@@ -45,24 +45,76 @@ try {
  assert.equal((await fetch(origin+'/api/benevoles/inscriptions',{method:'POST',headers:{Origin:'https://evil.test','Content-Type':'application/json'},body:'{}'})).status,403);
  assert.equal((await fetch(origin+'/api/benevoles/inscriptions',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:'{}'})).status,400);
  const context=await browser.newContext({viewport:{width:390,height:844}});const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.goto(origin+'/benevoles',{waitUntil:'networkidle'});
+ await page.goto(origin+'/benevoles#inscription',{waitUntil:'networkidle'});
  assert.equal(await page.locator('h1').textContent(),'L’espace bénévoles');
- assert.equal(await page.locator('fieldset').count(),3);
- for (const field of await page.locator('fieldset').all()) assert.deepEqual(await field.locator('label > span > span:first-child').allTextContents(),[
+ assert.equal(await page.locator('article').count(),3);
+ assert.equal(await page.locator('form').count(),0);
+ assert.ok(await page.getByText('Rejoignez l’équipe des bénévoles de l’EDR Nord Toulousain.',{exact:false}).isVisible());
+ assert.equal(await page.getByRole('button',{name:'Ajouter à mon écran d’accueil'}).count(),0);
+ assert.equal(await page.getByText('L’ajout à l’écran d’accueil est facultatif.',{exact:false}).count(),0);
+ assert.equal(await page.locator('aside').textContent(),'L’espace bénévoles à portée de main');
+ assert.ok(await page.locator('#inscription').isVisible());
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+ for(const [id,title,venue] of [
+ ['lespinasse-2026','Loto de Lespinasse','Salle du Canal des Deux Mers'],
+ ['bruguieres-2027','Loto de Bruguières','Salle Xeraco'],
+ ['saint-jory-2027','Loto de Saint-Jory','Foyer rural']]) {
+  const card=page.getByRole('article').filter({has:page.getByRole('heading',{name:title,exact:true})});
+  assert.ok(await card.getByText(venue,{exact:true}).isVisible());
+  assert.equal(await card.getByRole('link',{name:'Voir les missions',exact:false}).getAttribute('href'),`/benevoles/${id}`);
+ }
+ await page.getByRole('link',{name:'Voir les missions — Loto de Lespinasse',exact:true}).click();
+ await page.waitForURL('**/benevoles/lespinasse-2026');
+ assert.equal(await page.locator('h1').textContent(),'Loto de Lespinasse');
+ assert.equal(await page.locator('fieldset').count(),1);
+ assert.equal(await page.locator('fieldset label > span > span:first-child').count(),9);
+ assert.deepEqual(await page.locator('fieldset label > span > span:first-child').allTextContents(),[
  'Installation des tables, chaises et de la buvette','Encaissement','Tenue de la buvette','Contrôle des cartons','Annonce des numéros','Distribution des numéros','Rangement des tables et chaises','Balayage','Rangement de la buvette']);
- assert.ok(await page.getByText('1 / 4 places prises').isVisible());
- assert.equal(await page.getByText('0 inscrits · Sans limite de bénévoles',{exact:true}).count(),12);
- for(const field of await page.locator('fieldset').all()) assert.ok(await field.getByLabel('Rangement de la buvette').isEnabled());
- await page.getByLabel('Encaissement').first().check();await page.getByLabel(/^Installation/).first().check();await page.locator('fieldset').nth(1).getByLabel('Contrôle des cartons').check();
- await page.getByLabel('Nom',{exact:true}).fill('Test-Privé');await page.getByLabel('Prénom',{exact:true}).fill('Alice');
- await page.getByLabel('E-mail',{exact:true}).fill('alice-private@example.test');await page.getByLabel('Catégorie de l’enfant').selectOption('U10');await page.getByLabel('J’accepte').check();
+ await page.getByText('1 / 4 places prises').waitFor();
+ assert.equal(await page.getByText('0 inscrits · Sans limite de bénévoles',{exact:true}).count(),4);
+ assert.ok(await page.getByLabel('Rangement de la buvette').isEnabled());
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+ const fill=async()=>{
+  await page.getByLabel('Nom',{exact:true}).fill('Test-Privé');await page.getByLabel('Prénom',{exact:true}).fill('Alice');
+  await page.getByLabel('E-mail',{exact:true}).fill('alice-private@example.test');await page.getByLabel('Catégorie de l’enfant').selectOption('U10');await page.getByLabel('J’accepte').check();
+ };
+ await page.getByLabel('Encaissement').check();await page.getByLabel(/^Installation/).check();
+ await fill();
  await page.getByRole('button',{name:'Confirmer mon inscription'}).click();
  await page.getByRole('status').filter({hasText:'Inscription enregistrée'}).waitFor();
  assert.equal(await page.getByLabel('E-mail',{exact:true}).inputValue(),'');
- const dataResponse=await fetch(origin+'/api/benevoles');const data=await dataResponse.text();assert.equal(dataResponse.headers.get('cache-control'),'no-store');assert.ok(!data.includes('alice-private'));assert.ok(!data.includes('Test-Privé'));
- assert.equal((await db.query('select count(*)::int n from volunteer_assignments')).rows[0].n,3);
+ assert.equal((await db.query('select count(*)::int n from volunteer_assignments')).rows[0].n,2);
+ assert.equal((await db.query('select count(*)::int n from volunteer_mail')).rows[0].n,2);
+ assert.equal(await page.locator('fieldset input:checked').count(),0);
+ // A second visit follows the home card, with a new form and event-only selection.
+ await page.getByRole('link',{name:'Voir les autres événements'}).click();await page.waitForURL(url=>url.pathname==='/benevoles');
+ await page.getByRole('link',{name:'Voir les missions — Loto de Bruguières',exact:true}).click();await page.waitForURL('**/benevoles/bruguieres-2027');
+ assert.equal(await page.getByLabel('E-mail',{exact:true}).inputValue(),'');assert.equal(await page.locator('fieldset input:checked').count(),0);
+ await page.getByLabel('Contrôle des cartons').check();await fill();
+ await page.getByRole('button',{name:'Confirmer mon inscription'}).click();await page.getByRole('status').filter({hasText:'Inscription enregistrée'}).waitFor();
+ const assignments=(await db.query('select slot_id from volunteer_assignments order by slot_id')).rows.map(r=>r.slot_id);
+ assert.deepEqual(assignments,['bruguieres-2027-controle-cartons','lespinasse-2026-encaissement','lespinasse-2026-installation']);
  assert.equal((await db.query('select count(*)::int n from volunteer_mail')).rows[0].n,4);
- const publicPage=await context.newPage();await publicPage.goto(origin+'/benevoles',{waitUntil:'networkidle'});assert.ok(await publicPage.getByText('2 / 4 places prises').isVisible());assert.ok(!(await publicPage.content()).includes('alice-private'));
+ const dataResponse=await fetch(origin+'/api/benevoles');const data=await dataResponse.text();assert.equal(dataResponse.headers.get('cache-control'),'no-store');assert.ok(!data.includes('alice-private'));assert.ok(!data.includes('Test-Privé'));
+ const publicPage=await context.newPage();await publicPage.goto(origin+'/benevoles/lespinasse-2026',{waitUntil:'networkidle'});assert.ok(await publicPage.getByText('2 / 4 places prises').isVisible());assert.ok(!(await publicPage.content()).includes('alice-private'));
+ // Direct links, unique metadata and a clear 404 for unknown events.
+ for(const id of ['lespinasse-2026','bruguieres-2027','saint-jory-2027']) {
+  const r=await fetch(`${origin}/benevoles/${id}`);assert.equal(r.status,200);
+  const html=await r.text();assert.ok(html.includes(`/benevoles/${id}`));assert.ok(!html.includes('alice-private'));
+ }
+ assert.equal((await fetch(origin+'/benevoles/evenement-inconnu')).status,404);
+ await publicPage.goto(origin+'/benevoles/saint-jory-2027',{waitUntil:'networkidle'});
+ assert.ok(await publicPage.getByRole('heading',{name:'Loto de Saint-Jory',exact:true}).isVisible());
+ assert.equal(await publicPage.locator('fieldset input:checked').count(),0);
+ await page.setViewportSize({width:320,height:740});
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),'Event form overflows a 320px screen');
+ await page.goto(origin+'/benevoles',{waitUntil:'networkidle'});
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),'Event cards overflow a 320px screen');
+ await page.setViewportSize({width:1440,height:1000});await page.goto(origin+'/benevoles',{waitUntil:'networkidle'});
+ assert.equal(await page.locator('article').count(),3);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
+ await page.screenshot({path:'/tmp/edr-benevoles-accueil.png',fullPage:true});
+ await page.goto(origin+'/benevoles/lespinasse-2026',{waitUntil:'networkidle'});
+ await page.screenshot({path:'/tmp/edr-benevoles-evenement.png',fullPage:true});
  await page.evaluate(async()=>{await navigator.serviceWorker.ready;});await page.reload({waitUntil:'networkidle'});
  assert.ok(await page.evaluate(()=>!!navigator.serviceWorker.controller));
  assert.deepEqual(await page.evaluate(async()=>await caches.keys()),[]);
@@ -70,6 +122,6 @@ try {
  await publicPage.goto(origin+'/',{waitUntil:'networkidle'});assert.equal(await publicPage.evaluate(()=>navigator.serviceWorker.controller),null);
  await context.setOffline(true);await page.reload();await page.getByRole('heading',{name:'Vous êtes hors connexion'}).waitFor();assert.ok(!(await page.content()).includes('alice-private'));
  assert.deepEqual(errors,[]);
- console.log('PASS: closed registration/cron even with configured services and enabled slots, then explicit local opening; API validation/origin/auth, real SQL registration of three missions across two events, outbox, public counters in second browser, mobile form, isolated service worker, empty caches/storage, safe offline fallback. No real email sent.');
+ console.log('PASS: home cards and legacy anchor, three event pages, mobile/desktop layout, multiple missions in one submission, fresh form for second event, exact SQL assignments and outbox, public counters, closed-state protection, PWA scope and offline fallback without cached data. No real email sent.');
 }finally {if(browser)await browser.close();if(app)app.kill('SIGTERM');if(server)await new Promise(r=>server.close(r));await db.close();}
 })().catch(e=>{console.error(e);process.exit(1)});
