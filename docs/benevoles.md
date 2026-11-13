@@ -69,9 +69,9 @@ Les tests remplacent l'envoi par des réponses locales simulées ; ils ne contac
 
 ## Planification et rappels
 
-`vercel.json` contient un appel **chaque minute** à `/api/benevoles/cron`. Cette fréquence nécessite un plan Vercel compatible, notamment Pro ; **Hobby ne permet pas ce cron**. Vérifier le plan avant de considérer le déploiement compatible. Si nécessaire, utiliser un planificateur HTTPS externe à cette fréquence et retirer le cron Vercel dans une modification dédiée examinée. Sans planificateur activé, ni les confirmations différées ni les rappels ne partent.
+`vercel.json` ne définit pas de cron Vercel : le projet utilise l’offre Hobby, qui ne prend pas en charge une exécution chaque minute. Supabase Cron (`pg_cron`) appelle `/api/benevoles/cron` chaque minute via `pg_net`. Le job utilise `GET` avec `Authorization: Bearer …`; le secret correspondant est conservé dans Supabase Vault et doit correspondre à `CRON_SECRET` dans Vercel. Ne pas ajouter en parallèle un cron Vercel.
 
-Dans Vercel : vérifier le plan, déployer le projet avec `CRON_SECRET`, puis contrôler **Project → Settings → Cron Jobs** et les journaux de fonction. Aucune exécution authentifiée de test n'est lancée contre un service réel depuis ce travail.
+Dans Supabase : activer `pg_cron` et `pg_net`, créer le job `volunteers-mail-queue`, puis contrôler **Integrations → Cron** et les exécutions du job. La commande SQL du job ne contient pas le secret en clair. `pg_net` place temporairement les en-têtes déchiffrés dans sa file d’attente ; limiter les accès au projet Supabase aux responsables autorisés. Contrôler aussi les journaux de fonction Vercel. Aucune exécution authentifiée de test n'est lancée contre un service réel depuis ce travail.
 
 La file est persistante. Jusqu'à trois e-mails sont traités par invocation ; adapter la capacité du worker si le volume l'exige. Les confirmations attendent le prochain passage. Les rappels sont créés une seule fois par personne et événement le jour civil précédent en `Europe/Paris`, avec l'ensemble des missions. Cela évite un rappel par mission. Une panne de l'ordonnanceur pendant toute la veille ne permet pas de respecter l'échéance : surveiller son fonctionnement.
 
