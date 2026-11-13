@@ -19,7 +19,13 @@ export async function rpc<T>(name: string, args: object = {}): Promise<T> {
     method: 'POST', cache: 'no-store', headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' }, body: JSON.stringify(args), signal: AbortSignal.timeout(15000),
   });
   if (!response.ok) throw Error('Stockage indisponible');
-  return response.json();
+  const body = await response.text();
+  if (!body.trim()) return undefined as T;
+  try {
+    return JSON.parse(body) as T;
+  } catch {
+    throw Error('Réponse de stockage invalide');
+  }
 }
 export function authorized(header: string | null) {
   const expected = process.env.CRON_SECRET;
