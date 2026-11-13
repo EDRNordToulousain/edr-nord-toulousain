@@ -2,34 +2,39 @@
 import Link from 'next/link';
 import { availabilityLabel, missionIsFull } from '@/lib/volunteers/availability';
 import { EventSchedule } from './event-schedule';
-import { useEffect, useState } from 'react';
-import { childCategories, previewSlots, type PublicSlot, type VolunteerEvent } from '@/lib/volunteers/events';
+import { useState } from 'react';
+import { useAvailability } from './use-availability';
+import { childCategories, type VolunteerEvent } from '@/lib/volunteers/events';
 export function Volunteers({ event: e }: { event: VolunteerEvent }) {
-  const [slots, setSlots] = useState<PublicSlot[]>(previewSlots.filter(slot => slot.event_id === e.id));
-  const [countsLive, setCountsLive] = useState(false);
-  const [available, setAvailable] = useState(false);
+  const { slots, countsLive, status, error, refresh } = useAvailability(e.id);
+  const available = status === 'open';
   const [selected, setSelected] = useState<string[]>([]);
+  const [consent, setConsent] = useState(false);
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
-  useEffect(() => {
-    let active = true;
-    fetch('/api/benevoles', { cache: 'no-store' }).then(async r => { if (!r.ok) throw Error(); return r.json(); })
-      .then(data => { if (active) { setSlots(data.slots.filter((slot: PublicSlot) => slot.event_id === e.id)); setCountsLive(data.countsLive === true); setAvailable(data.registrationOpen === true); } }).catch(() => { if (active) { setAvailable(false); setCountsLive(false); } });
-    return () => { active = false; };
-  }, [e.id]);
+  const eligible = selected.filter(id => slots.some(slot => slot.id === id && slot.enabled === true && !missionIsFull(slot)));
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!available) return;
-    setBusy(true); setMessage('');
+    if (!available || busy || !consent || !eligible.length) return;
     const form = event.currentTarget;
+    if (!form.reportValidity()) return;
     const data = new FormData(form);
+    setBusy(true); setMessage('');
     try {
-      const response = await fetch('/api/benevoles/inscriptions', { method: 'POST', cache: 'no-store', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ firstName: data.get('firstName'), lastName: data.get('lastName'), email: data.get('email'), category: data.get('category'), website: data.get('website'), consent: data.get('consent') === 'on', slots: selected }) });
+      // Check the current API state before posting; never rely on an old tab's flag.
+      const current = await refresh();
+      if (!current || current.status !== 'open') return;
+      const selectedNow = eligible.filter(id => current.slots.some(slot => slot.id === id && slot.enabled === true && !missionIsFull(slot)));
+      if (selectedNow.length !== selected.length) {
+        setSelected(selectedNow);
+        setMessage('Les disponibilités ont changé. Vérifiez vos missions avant de confirmer.');
+        return;
+      }
+      const response = await fetch('/api/benevoles/inscriptions', { method: 'POST', cache: 'no-store', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ firstName: data.get('firstName'), lastName: data.get('lastName'), email: data.get('email'), category: data.get('category'), website: data.get('website'), consent: data.get('consent') === 'on', slots: selectedNow }) });
       const result = await response.json();
       setMessage(response.ok ? result.message : result.error);
-      if (response.ok) { form.reset(); setSelected([]); }
-      const refresh = await fetch('/api/benevoles', { cache: 'no-store' });
-      if (refresh.ok) { const data = await refresh.json(); setSlots(data.slots.filter((slot: PublicSlot) => slot.event_id === e.id)); setAvailable(data.registrationOpen === true); setCountsLive(data.countsLive === true); }
+      if (response.ok) { form.reset(); setSelected([]); setConsent(false); }
+      await refresh();
     } catch { setMessage('Connexion interrompue. En cas de doute, contactez l’EDR avant de renouveler votre inscription.'); }
     finally { setBusy(false); }
   }
@@ -42,7 +47,7 @@ export function Volunteers({ event: e }: { event: VolunteerEvent }) {
     </div></section>
     <div className="mx-auto max-w-4xl px-4 py-6">
       <div className="mb-5 rounded-2xl border border-slate-200 bg-white p-4 shadow-card"><EventSchedule event={e} /></div>
-      <form onSubmit={submit} id="inscription">
+      <form onSubmit={submit} id="inscription" data-registration-state={status} aria-busy={status === 'loading' || busy}>
         <fieldset>
           <legend className="text-2xl font-black text-night">Choisissez vos missions</legend>
           <p className="mt-3 text-slate-600">Cochez une ou plusieurs missions pour cet événement, puis validez votre inscription une seule fois.</p>
@@ -64,9 +69,14 @@ export function Volunteers({ event: e }: { event: VolunteerEvent }) {
             <label className="font-bold">Catégorie de l’enfant<select className={input} name="category" required defaultValue=""><option value="" disabled>Choisir une catégorie</option>{childCategories.map(c => <option key={c}>{c}</option>)}</select></label>
           </div>
           <div hidden aria-hidden="true"><label>Site web<input name="website" tabIndex={-1} autoComplete="off" /></label></div>
-          <label className="mt-6 flex items-start gap-3 text-sm"><input type="checkbox" name="consent" required className="mt-1 h-4 w-4 accent-blue" /><span>J’accepte l’utilisation de ces informations pour la gestion de mon bénévolat. Pour consulter, corriger ou supprimer mes données : communication.edrnordtoulousain@gmail.com.</span></label>
-          <button disabled={!available || !selected.length || busy} className="mt-6 rounded-full bg-red px-6 py-3 font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{busy ? 'Enregistrement…' : 'Confirmer mon inscription'}</button>
-          {!available && <p className="mt-4 text-sm text-slate-600">Les inscriptions ne sont pas encore ouvertes. Merci de revenir prochainement.</p>}
+          <label className="mt-6 flex items-start gap-3 text-sm"><input type="checkbox" name="consent" checked={consent} onChange={event => setConsent(event.target.checked)} required className="mt-1 h-4 w-4 accent-blue" /><span>J’accepte l’utilisation de ces informations pour la gestion de mon bénévolat. Pour consulter, corriger ou supprimer mes données : communication.edrnordtoulousain@gmail.com.</span></label>
+          <button disabled={!available || !eligible.length || !consent || busy} className="mt-6 rounded-full bg-red px-6 py-3 font-bold text-white disabled:cursor-not-allowed disabled:opacity-50">{busy ? 'Enregistrement…' : 'Confirmer mon inscription'}</button>
+          {status === 'loading' && <p className="mt-4 text-sm text-slate-600" role="status">Vérification des inscriptions…</p>}
+          {status === 'closed' && <p className="mt-4 text-sm text-slate-600">Les inscriptions ne sont pas encore ouvertes. Merci de revenir prochainement.</p>}
+          {status === 'error' && <div className="mt-4 text-slate-600" role="alert">
+            <p>{error === 'version' ? 'Le site a été mis à jour. Actualisez cette page pour vous inscrire.' : 'Impossible de vérifier les inscriptions pour le moment. Veuillez réessayer.'}</p>
+            <button type="button" onClick={() => error === 'version' ? window.location.reload() : void refresh()} className="mt-2 font-bold text-blue underline underline-offset-4">{error === 'version' ? 'Actualiser la page' : 'Réessayer'}</button>
+          </div>}
           <Link href="/benevoles" className="mt-5 block w-fit font-bold text-blue underline underline-offset-4">Voir les autres événements</Link>
           <p role="status" aria-live="polite" className="mt-4 font-semibold text-night">{message}</p>
         </div>

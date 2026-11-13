@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { PwaRegistration } from './pwa-registration';
 
 export const metadata: Metadata = {
+  other: { 'edr-volunteers-release': process.env.VERCEL_GIT_COMMIT_SHA || 'local' },
   icons: { apple: '/benevoles/icon-192.png' },
   manifest: '/benevoles/manifest.webmanifest',
 };

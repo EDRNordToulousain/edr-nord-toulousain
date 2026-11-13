@@ -15,7 +15,8 @@ try {
  await db.exec(readFileSync(path.join(project,'supabase/migrations/202611130002_missions.sql'),'utf8'));
  await db.exec(readFileSync(path.join(project,'supabase/migrations/202611130003_confirmed_capacities.sql'),'utf8'));
  await db.exec(readFileSync(path.join(project,'supabase/migrations/202611130004_unlimited_availability.sql'),'utf8'));
- await db.exec("update volunteer_events set event_date=(now() at time zone 'Europe/Paris')::date+1; update volunteer_slots set enabled=true where capacity is not null; update volunteer_slots set enabled=false where id='bruguieres-2027-buvette';");
+ await db.exec("update volunteer_events set event_date=(now() at time zone 'Europe/Paris')::date+1");
+ await db.exec(readFileSync(path.join(project,'supabase/migrations/202611130005_open_available_limited_missions.sql'),'utf8'));
  server=createServer(async(req,res)=>{try{
   assert.equal(req.headers.authorization,'Bearer local-test-only');
   let body='';for await(const chunk of req) body+=chunk;
@@ -101,14 +102,26 @@ try {
  await page.getByRole('link',{name:'Voir les autres événements'}).click();await page.waitForURL(url=>url.pathname==='/benevoles');
  await page.getByRole('link',{name:'Voir les missions — Loto de Bruguières',exact:true}).click();await page.waitForURL('**/benevoles/bruguieres-2027');
  assert.equal(await page.getByLabel('E-mail',{exact:true}).inputValue(),'');assert.equal(await page.locator('fieldset input:checked').count(),0);
- await page.getByText('Inscriptions fermées pour cette mission',{exact:true}).waitFor();
- assert.ok(await page.getByLabel('Tenue de la buvette').isDisabled());
+ await page.getByText('0 / 3 places prises',{exact:false}).waitFor();
+ assert.equal(await page.getByText('Inscriptions fermées pour cette mission',{exact:true}).count(),0);
+ assert.ok(await page.getByLabel('Tenue de la buvette').isEnabled());
  await page.getByLabel('Contrôle des cartons').check();await fill();
  await page.getByRole('button',{name:'Confirmer mon inscription'}).click();await page.getByRole('status').filter({hasText:'Inscription enregistrée'}).waitFor();
  const assignments=(await db.query('select slot_id from volunteer_assignments order by slot_id')).rows.map(r=>r.slot_id);
  assert.deepEqual(assignments,['bruguieres-2027-controle-cartons','lespinasse-2026-installation','lespinasse-2026-rangement-tables']);
  assert.equal((await db.query('select count(*)::int n from volunteer_mail')).rows[0].n,4);
  const dataResponse=await fetch(origin+'/api/benevoles');const data=await dataResponse.text();assert.equal(dataResponse.headers.get('cache-control'),'no-store');assert.ok(!data.includes('alice-private'));assert.ok(!data.includes('Test-Privé'));
+ // A genuinely full slot stays disabled even though migration 005 left it enabled.
+ for(let i=0;i<3;i++) {
+  const person=(await db.query("insert into volunteer_people(event_id,email,first_name,last_name,category) values('bruguieres-2027',$1,'Local','Full','U10') returning id",[`full-buvette-${i}@example.test`])).rows[0].id;
+  await db.query("insert into volunteer_assignments values($1,'bruguieres-2027-buvette')",[person]);
+ }
+ const capacityPage=await context.newPage();await capacityPage.goto(origin+'/benevoles/bruguieres-2027',{waitUntil:'networkidle'});
+ await capacityPage.getByText('3 / 3 places prises · 0 places restantes',{exact:true}).waitFor();
+ assert.ok(await capacityPage.getByLabel('Tenue de la buvette').isDisabled());
+ assert.ok(await capacityPage.getByLabel('Encaissement').isEnabled());
+ assert.ok(await capacityPage.getByText('1 / 2 places prises · 1 place restante',{exact:true}).isVisible());
+ await capacityPage.close();
  const publicPage=await context.newPage();await publicPage.goto(origin+'/benevoles/lespinasse-2026',{waitUntil:'networkidle'});assert.ok(await publicPage.getByText('1 / 4 places prises').isVisible());assert.ok(!(await publicPage.content()).includes('alice-private'));
  // Direct links, unique metadata and a clear 404 for unknown events.
  for(const id of ['lespinasse-2026','bruguieres-2027','saint-jory-2027']) {

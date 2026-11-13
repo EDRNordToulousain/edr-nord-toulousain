@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "eslint .",
     "test:volunteers": "node --test tests/volunteers*.test.mjs",
-    "test:volunteers:browser": "node tests/volunteers-browser.mjs"
+    "test:volunteers:browser": "node tests/volunteers-browser.mjs",
+    "test:volunteers:status": "node tests/volunteers-status-browser.mjs"
   },
   "dependencies": {
     "next": "^16.2.10",
