@@ -20,9 +20,9 @@ export const volunteerMissions = [
 
 // A new catalogue entry creates its card and route; storage uses a matching migration.
 export const volunteerEvents = [
-  { id: 'lespinasse-2026', title: 'Loto de Lespinasse', town: 'Lespinasse', date: '2026-11-21', label: 'samedi 21 novembre 2026', venue: 'Salle du Canal des Deux Mers', setup: '18 h', doors: '19 h 30', start: '21 h', startLabel: 'Début du loto', missions: volunteerMissions },
+  { id: 'lespinasse-2026', title: 'Loto de Lespinasse', town: 'Lespinasse', date: '2026-11-21', label: 'samedi 21 novembre 2026', venue: 'Salle du Canal des Deux Mers', setup: '17 h 30', doors: '19 h 30', start: '21 h', startLabel: 'Début du loto', missions: volunteerMissions },
   { id: 'bruguieres-2027', title: 'Loto de Bruguières', town: 'Bruguières', date: '2027-01-24', label: 'dimanche 24 janvier 2027', venue: 'Salle Xeraco', setup: '11 h', doors: '13 h', start: '15 h', startLabel: 'Début du loto', missions: volunteerMissions },
-  { id: 'saint-jory-2027', title: 'Loto de Saint-Jory', town: 'Saint-Jory', date: '2027-03-20', label: 'samedi 20 mars 2027', venue: 'Foyer rural', setup: '18 h', doors: '19 h 30', start: '21 h', startLabel: 'Début du loto', missions: volunteerMissions },
+  { id: 'saint-jory-2027', title: 'Loto de Saint-Jory', town: 'Saint-Jory', date: '2027-03-20', label: 'samedi 20 mars 2027', venue: 'Foyer rural', setup: '17 h 30', doors: '19 h 30', start: '21 h', startLabel: 'Début du loto', missions: volunteerMissions },
 ] as const satisfies readonly VolunteerEvent[];
 
 export const childCategories = ['Baby', 'U6', 'U8', 'U10', 'U12', 'U14'] as const;
