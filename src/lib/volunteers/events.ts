@@ -1,7 +1,19 @@
-export type VolunteerMission = { id: string; title: string; capacity: number | null; icon?: string };
+export type VolunteerMission = {
+  id: string;
+  title: string;
+  capacity: number | null;
+  icon?: string;
+  description?: string;
+};
+export type VolunteerScheduleItem = { label: string; value: string };
 export type VolunteerEvent = {
-  id: string; title: string; town: string; date: string; label: string; venue: string;
-  setup: string; doors: string; start: string; startLabel: string;
+  id: string;
+  title: string;
+  town: string;
+  date: string;
+  label: string;
+  venue: string;
+  schedule: readonly VolunteerScheduleItem[];
   missions: readonly VolunteerMission[];
 };
 
@@ -18,11 +30,57 @@ export const volunteerMissions = [
   { id: 'rangement-buvette', icon: '📦', title: 'Rangement de la buvette', capacity: null },
 ] as const;
 
+export const tombolaMissions = [
+  {
+    id: 'prospection-lots',
+    icon: '🎁',
+    title: 'Recherche et prospection de lots',
+    description: 'Identifier et contacter les commerces, entreprises, artisans et partenaires pour obtenir des lots, bons cadeaux ou prestations en don, avec possibilité de reçu fiscal (CERFA).',
+    capacity: null,
+  },
+  {
+    id: 'collecte-lots',
+    icon: '🚗',
+    title: 'Collecte des lots',
+    description: 'Récupérer les lots auprès des commerçants et entreprises partenaires.',
+    capacity: 2,
+  },
+] as const;
+
 // A new catalogue entry creates its card and route; storage uses a matching migration.
+// The array is kept in chronological order using each event's launch or event date.
 export const volunteerEvents = [
-  { id: 'lespinasse-2026', title: 'Loto de Lespinasse', town: 'Lespinasse', date: '2026-11-21', label: 'samedi 21 novembre 2026', venue: 'Salle du Canal des Deux Mers', setup: '17 h 30', doors: '19 h 30', start: '21 h', startLabel: 'Début du loto', missions: volunteerMissions },
-  { id: 'bruguieres-2027', title: 'Loto de Bruguières', town: 'Bruguières', date: '2027-01-24', label: 'dimanche 24 janvier 2027', venue: 'Salle Xeraco', setup: '11 h', doors: '13 h', start: '15 h', startLabel: 'Début du loto', missions: volunteerMissions },
-  { id: 'saint-jory-2027', title: 'Loto de Saint-Jory', town: 'Saint-Jory', date: '2027-03-20', label: 'samedi 20 mars 2027', venue: 'Foyer rural', setup: '17 h 30', doors: '19 h 30', start: '21 h', startLabel: 'Début du loto', missions: volunteerMissions },
+  {
+    id: 'lespinasse-2026', title: 'Loto de Lespinasse', town: 'Lespinasse', date: '2026-11-21', label: 'samedi 21 novembre 2026', venue: 'Salle du Canal des Deux Mers', missions: volunteerMissions,
+    schedule: [
+      { label: 'Début des besoins bénévoles', value: '17 h 30' },
+      { label: 'Ouverture des portes', value: '19 h 30' },
+      { label: 'Début du loto', value: '21 h' },
+    ],
+  },
+  {
+    id: 'tombola-2026-2027', title: 'Tombola de l’EDR', town: 'Saint-Jory', date: '2026-12-03', label: 'lancement jeudi 3 décembre 2026', venue: 'Stade David Berty, Saint-Jory', missions: tombolaMissions,
+    schedule: [
+      { label: 'Lancement de la tombola', value: '3 décembre 2026' },
+      { label: 'Tirage au sort', value: '17 mars 2027' },
+    ],
+  },
+  {
+    id: 'bruguieres-2027', title: 'Loto de Bruguières', town: 'Bruguières', date: '2027-01-24', label: 'dimanche 24 janvier 2027', venue: 'Salle Xeraco', missions: volunteerMissions,
+    schedule: [
+      { label: 'Début des besoins bénévoles', value: '11 h' },
+      { label: 'Ouverture des portes', value: '13 h' },
+      { label: 'Début du loto', value: '15 h' },
+    ],
+  },
+  {
+    id: 'saint-jory-2027', title: 'Loto de Saint-Jory', town: 'Saint-Jory', date: '2027-03-20', label: 'samedi 20 mars 2027', venue: 'Foyer rural', missions: volunteerMissions,
+    schedule: [
+      { label: 'Début des besoins bénévoles', value: '17 h 30' },
+      { label: 'Ouverture des portes', value: '19 h 30' },
+      { label: 'Début du loto', value: '21 h' },
+    ],
+  },
 ] as const satisfies readonly VolunteerEvent[];
 
 export const childCategories = ['Baby', 'U6', 'U8', 'U10', 'U12', 'U14'] as const;

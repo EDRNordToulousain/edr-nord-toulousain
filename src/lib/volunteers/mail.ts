@@ -11,8 +11,9 @@ export async function deliverMail() {
       const event = volunteerEvents.find(e => e.id === job.event_id);
       if (!event) throw Error();
       const admin = job.kind === 'admin';
-      const subject = job.kind === 'reminder' ? `Rappel : loto de ${event.town} demain` : `Inscription bénévole — ${event.town}`;
-      const text = `${admin ? 'Nouvelle inscription' : `Bonjour ${job.first_name},`}\n\n${job.kind === 'reminder' ? 'Votre rendez-vous de demain' : 'Inscription enregistrée'} : ${event.town}, ${event.label}, ${event.venue}.\nInstallation dès ${event.setup}, portes à ${event.doors}, loto à ${event.start}.\nMissions : ${job.missions.join(', ')}.\n${admin ? `Bénévole : ${job.first_name} ${job.last_name}\nE-mail : ${job.email}\nCatégorie : ${job.category}\n` : ''}\nPour toute modification : communication.edrnordtoulousain@gmail.com`;
+      const subject = job.kind === 'reminder' ? `Rappel : ${event.title} demain` : `Inscription bénévole — ${event.title}`;
+      const schedule = event.schedule.map(item => `${item.label} : ${item.value}.`).join('\n');
+      const text = `${admin ? 'Nouvelle inscription' : `Bonjour ${job.first_name},`}\n\n${job.kind === 'reminder' ? 'Votre rendez-vous de demain' : 'Inscription enregistrée'} : ${event.title}, ${event.label}, ${event.venue}.\n${schedule}\nMissions : ${job.missions.join(', ')}.\n${admin ? `Bénévole : ${job.first_name} ${job.last_name}\nE-mail : ${job.email}\nCatégorie : ${job.category}\n` : ''}\nPour toute modification : communication.edrnordtoulousain@gmail.com`;
       const response = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { Authorization: `Bearer ${required('RESEND_API_KEY')}`, 'Content-Type': 'application/json', 'Idempotency-Key': `volunteer-${job.id}` }, body: JSON.stringify({ from: required('VOLUNTEERS_EMAIL_FROM'), to: [admin ? 'communication.edrnordtoulousain@gmail.com' : job.email], reply_to: 'communication.edrnordtoulousain@gmail.com', subject, text }), signal: AbortSignal.timeout(10000) });
       if (!response.ok) throw Error();
       await rpc('volunteer_finish_mail', { p_id: job.id, p_lease: job.lease, p_success: true }); sent++;
