@@ -1,29 +1,29 @@
 import Image from "next/image";
 import Link from "next/link";
-import { featuredEvents, news } from "@/data/site-content";
+import { news } from "@/data/site-content";
 import { Card, Container, PageHero } from "./UI";
 
 const featuredNews = [
   {
-    id: "vide-grenier-2026",
-    eyebrow: "Dimanche 8 novembre 2026",
-    title: "Vide-grenier de l’EDR Nord Toulousain",
-    description: "Espace / Salle des Deux Mers et boulodrome — Lespinasse. Réservez dès maintenant votre emplacement en ligne.",
-    image: featuredEvents.videGrenier.poster,
-    alt: "Affiche du vide-grenier de l’EDR Nord Toulousain du 8 novembre 2026 à Lespinasse",
-    href: "/evenements/vide-grenier",
-    ratio: "aspect-[1138/1402]",
+    "id": "vente-calendriers-2026",
+    "title": "Grande vente des calendriers",
+    "description": "À partir du 3 décembre : 5 € le calendrier pour financer le matériel, les sorties et les tournois de l’EDR.",
+    "image": "/images/carousel/vente-calendriers-2026.png",
+    "alt": "Grande vente des calendriers de l’EDR à partir du 3 décembre, 5 € le calendrier",
+    "eyebrow": "À partir du 3 décembre 2026",
+    "href": "/images/carousel/vente-calendriers-2026.png",
+    "ratio": "aspect-[9/16]"
   },
   {
-    id: "loto-2026",
-    eyebrow: "Dimanche 11 octobre 2026 à 15h",
-    title: "Retour des lotos de l’EDR Nord Toulousain",
-    description: "Rendez-vous à la Salle Xeraco à Bruguières pour le loto de l’école de rugby.",
-    image: featuredEvents.loto.poster,
-    alt: "Affiche du loto de l’EDR Nord Toulousain du 11 octobre 2026 à Bruguières",
-    href: "/evenements/loto",
-    ratio: "aspect-[941/1672]",
-  },
+    "id": "repas-noel-2026",
+    "title": "Repas de Noël de l’EDR",
+    "description": "Cadeaux du Père Noël, diffusion du match, animations et repas : découvrez le programme réservé aux licenciés et familles de l’EDR.",
+    "image": "/images/carousel/repas-noel-2026.png",
+    "alt": "Programme du repas de Noël de l’EDR : animations et tartiflette au confit de canard",
+    "eyebrow": "Repas de Noël de l’EDR",
+    "href": "/images/carousel/repas-noel-2026.png",
+    "ratio": "aspect-[9/16]"
+  }
 ] as const;
 
 export function NewsPage() {
@@ -41,8 +41,8 @@ export function NewsPage() {
                 <Image
                   src={item.image}
                   alt={item.alt}
-                  width={item.id === "loto-2026" ? 941 : 1138}
-                  height={item.id === "loto-2026" ? 1672 : 1402}
+                  width={941}
+                  height={1672}
                   sizes="(min-width: 1024px) 50vw, 100vw"
                   className={`${item.ratio} h-auto w-full object-contain`}
                 />
